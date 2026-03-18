@@ -1,0 +1,120 @@
+
+.dark-card {
+  background: #181c24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 38px rgba(0, 0, 0, 0.32);
+}
+
+.request-badge {
+  background: rgba(13, 110, 253, 0.18);
+  border: 1px solid rgba(13, 110, 253, 0.35);
+  color: #cfe2ff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.heading-title {
+  letter-spacing: 0.3px;
+}
+
+.golden-request-note {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 250, 224, 0.28) 0%,
+      rgba(255, 236, 153, 0.12) 12%,
+      rgba(255, 215, 64, 0) 13%
+    ),
+    linear-gradient(145deg, #f2cf63 0%, #d79c1f 42%, #b6780c 100%);
+  border: 1px solid rgba(255, 244, 204, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -6px 10px rgba(122, 78, 0, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.14);
+  color: #241700;
+  text-align: center;
+}
+
+.golden-request-note .text-warning {
+  color: #4a2d00 !important;
+}
+
+.golden-request-note p {
+  text-shadow: none;
+}
+
+.golden-request-note .fw-bold {
+  color: #201400;
+}
+
+.request-tip {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.25);
+}
+
+.custom-textarea {
+  min-height: 128px;
+  background-color: #222634;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.custom-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.custom-textarea:focus {
+  background-color: #222634;
+  color: #fff;
+  border-color: rgba(25, 135, 84, 0.9);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+  transform: translateY(-1px);
+}
+
+.char-count {
+  color: #adb5bd;
+  font-weight: 600;
+}
+
+.send-btn {
+  background: linear-gradient(135deg, #15a362, #0e7a46);
+  color: #fff;
+  border: none;
+  min-width: 188px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(14, 122, 70, 0.4);
+  filter: brightness(1.05);
+}
+
+.send-btn:disabled {
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+}
+
+.icon-wrapper {
+  width: 18px;
+  height: 18px;
+  position: relative;
+}
+
+.send-icon {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.3s ease;
+}
+
+.send-btn:hover .send-icon {
+  transform: translateX(2px) translateY(-2px);
+}

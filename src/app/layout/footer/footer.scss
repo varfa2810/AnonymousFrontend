@@ -1,0 +1,50 @@
+.app-footer {
+  background: #1b2028;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8f9fa;
+}
+
+.footer-chip {
+  width: fit-content;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #ffda6a;
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+}
+
+.footer-title {
+  color: #ffffff;
+}
+
+.footer-subtitle {
+  color: #ffe8a1;
+}
+
+.footer-text,
+.footer-text-small,
+.footer-muted {
+  color: rgba(248, 249, 250, 0.82);
+}
+
+.footer-list li {
+  margin-bottom: 0.45rem;
+}
+
+.footer-list i {
+  color: #8ce99a;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}

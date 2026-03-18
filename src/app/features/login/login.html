@@ -1,0 +1,131 @@
+<section class="login-page pt-2 pb-4 pt-md-3 pb-md-5">
+  <div class="container auth-shell-container">
+    <div class="single-auth-card rounded-4 overflow-hidden">
+      <div class="row g-0 h-100">
+        <div class="col-12 col-lg-5">
+          <div class="app-info-panel h-100 p-4 p-md-5 text-white">
+            <span class="app-info-chip d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3">
+              <i class="bi bi-info-circle-fill"></i>
+              About Anonymous
+            </span>
+
+            <h2 class="h3 fw-bold mb-2 app-info-title">Speak Freely. Stay Private.</h2>
+            <p class="app-info-subtitle mb-4">
+              Anonymous is a safe community space where users can share messages without identity
+              pressure and still get meaningful reactions, without the profile popularity contest.
+            </p>
+
+            <ul class="list-unstyled app-info-list mb-4">
+              <li><i class="bi bi-shield-check me-2"></i>Post requests anonymously</li>
+              <li><i class="bi bi-chat-heart me-2"></i>Get quick community feedback</li>
+              <li><i class="bi bi-stars me-2"></i>Golden comments rise to the top</li>
+              <li><i class="bi bi-emoji-smile me-2"></i>Less noise, more honest conversations</li>
+              <li><i class="bi bi-emoji-sunglasses me-2"></i>Zero influencer energy, all real talk</li>
+              <li><i class="bi bi-cup-hot me-2"></i>Bring chai, drop truth, skip the drama</li>
+            </ul>
+
+            <div class="app-info-note rounded-3 p-3 mt-auto">
+              <p class="mb-0 small">
+                Built for real thoughts. Side effects may include honest opinions and surprisingly
+                wholesome comment sections.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+          <div class="login-panel h-100 p-3 p-md-4 p-lg-5 d-flex align-items-center">
+            <div class="card login-card border-0 rounded-4 w-100">
+              <div class="card-body p-4 p-md-4 pb-3 pb-md-3 text-white">
+                <div class="text-center mb-4">
+                  <span class="login-chip d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    Secure Login
+                  </span>
+
+                  <h1 class="h3 fw-bold mb-1">Welcome Back</h1>
+                  <p class="text-light-emphasis mb-0">
+                    Sign in to continue to your anonymous space.
+                  </p>
+                </div>
+
+                <form [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate>
+                  <div class="mb-3">
+                    @if (loginErrorMessage()) {
+                      <div class="login-inline-error mb-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ loginErrorMessage() }}
+                      </div>
+                    }
+                    <label for="username" class="form-label small text-light fw-semibold">Username</label>
+                    <div class="input-group login-input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-person-fill"></i>
+                      </span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        formControlName="username"
+                        placeholder="Enter your username"
+                        (input)="clearLoginError()"
+                        [class.is-invalid]="hasError('username', 'required')"
+                      />
+                    </div>
+                    @if (hasError('username', 'required')) {
+                      <small class="field-error d-block mt-1">Username is required.</small>
+                    }
+                  </div>
+
+                  <div class="mb-2">
+                    <label for="password" class="form-label small text-light fw-semibold">Password</label>
+                    <div class="input-group login-input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-lock-fill"></i>
+                      </span>
+                      <input
+                        [type]="showPassword ? 'text' : 'password'"
+                        class="form-control"
+                        id="password"
+                        formControlName="password"
+                        placeholder="Enter your password"
+                        (input)="clearLoginError()"
+                        [class.is-invalid]="hasError('password', 'required')"
+                        autocomplete="current-password"
+                      />
+                      <button
+                        type="button"
+                        class="input-group-text password-toggle"
+                        (click)="showPassword = !showPassword"
+                        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                      >
+                        <i [className]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+                      </button>
+                    </div>
+                    @if (hasError('password', 'required')) {
+                      <small class="field-error d-block mt-1">Password is required.</small>
+                    }
+                  </div>
+
+                  <div class="text-center mt-5">
+                    <button type="submit" class="btn login-btn btn-lg w-50 fw-semibold rounded-3 d-inline-flex justify-content-center align-items-center">
+                      <i class="bi bi-box-arrow-in-right me-2"></i>
+                      Login
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="card-footer border-0 text-center pt-2 pb-3 bg-transparent">
+                <span class="text-light-emphasis small">
+                  Don&apos;t have an account?
+                  <a routerLink="/register" class="login-link fw-semibold text-decoration-none ms-1">Register</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

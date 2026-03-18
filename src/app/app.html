@@ -1,0 +1,48 @@
+<div class="app-background-pattern" aria-hidden="true">
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+  <i class="bi bi-incognito"></i>
+</div>
+
+<div class="app-shell d-flex flex-column min-vh-100">
+  @if (isAuthenticated()) {
+    <div class="sticky-top z-3">
+      <app-header></app-header>
+    </div>
+  }
+
+  <main class="flex-fill">
+    <div class="container py-4">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  @if (isAuthenticated()) {
+    <app-footer></app-footer>
+  }
+</div>

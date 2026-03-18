@@ -1,0 +1,131 @@
+.settings-shell {
+  background: #171d27;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.32);
+}
+
+.settings-chip {
+  background: rgba(13, 110, 253, 0.16);
+  border: 1px solid rgba(13, 110, 253, 0.34);
+  color: #d7e7ff;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.settings-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-input-group .input-group-text {
+  background: #232a35;
+  color: #a5b4c3;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 0;
+}
+
+.settings-input-group .form-control {
+  background: #232a35;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 0;
+}
+
+.settings-input-group .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.settings-input-group .form-control:focus {
+  background: #232a35;
+  color: #fff;
+  box-shadow: none;
+  border-color: rgba(13, 110, 253, 0.5);
+}
+
+.settings-input-group:focus-within .input-group-text,
+.settings-input-group:focus-within .form-control {
+  border-color: rgba(13, 110, 253, 0.5);
+}
+
+.settings-helper-text {
+  color: rgba(248, 249, 250, 0.68);
+  font-size: 0.8rem;
+}
+
+.settings-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 135, 84, 0.16);
+  color: #8ce99a;
+  border: 1px solid rgba(25, 135, 84, 0.32);
+}
+
+.settings-danger {
+  background: rgba(220, 53, 69, 0.08);
+  border: 1px solid rgba(220, 53, 69, 0.24);
+}
+
+.settings-danger-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(220, 53, 69, 0.16);
+  color: #ffb3bd;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.settings-danger-note {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-note {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-primary-btn {
+  background: #0d6efd;
+  border: 1px solid #0d6efd;
+  color: #fff;
+}
+
+.settings-primary-btn:hover {
+  background: #0b5ed7;
+  border-color: #0b5ed7;
+  color: #fff;
+}
+
+.settings-primary-btn:disabled {
+  opacity: 0.55;
+}
+
+.settings-danger-btn {
+  background: #dc3545;
+  border: 1px solid #dc3545;
+  color: #fff;
+}
+
+.settings-danger-btn:hover {
+  background: #bb2d3b;
+  border-color: #bb2d3b;
+  color: #fff;
+}
+
+.settings-secondary-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8f9fa;
+}
+
+.settings-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}

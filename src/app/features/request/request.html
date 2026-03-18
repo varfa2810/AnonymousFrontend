@@ -1,0 +1,78 @@
+<section class="request-page py-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-11 col-xl-12">
+        <div class="card dark-card border-0 rounded-4 overflow-hidden">
+          <div class="card-body p-4 text-white">
+            <div
+              class="request-badge d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3"
+            >
+              <i class="bi bi-incognito"></i>
+              Anonymous Mode
+            </div>
+
+            <h2 class="fw-bold mb-2 heading-title">
+              <i class="bi bi-chat-left-dots-fill me-2 text-success"></i>
+              Submit Your Message
+            </h2>
+            <p class="text-light-emphasis mb-3">
+              Speak freely. Your identity stays private while your message reaches the community.
+            </p>
+
+            <div class="golden-request-note rounded-4 p-3 mb-3 text-white">
+              <p class="mb-1 fw-bold">
+                <i class="bi bi-stars me-2 text-warning"></i>
+                Golden Spotlight
+              </p>
+              <p class="mb-0 small">
+                Messages that earn <span class="fw-bold text-warning">20 likes</span> unlock
+                <span class="fw-bold text-warning">Golden Comment</span> status and stand out at
+                the top of the conversation.
+              </p>
+            </div>
+
+            <div class="mb-3">
+              <label for="requestInput" class="form-label text-light fw-semibold">
+                Write your anonymous request
+              </label>
+              <textarea
+                class="form-control custom-textarea"
+                id="requestInput"
+                rows="7"
+                [(ngModel)]="requestText"
+                [maxlength]="maxLength"
+                
+                placeholder="Type your request here..."
+              ></textarea>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <small class="text-light-emphasis">
+                Min {{ minLength }} / Max {{ maxLength }} characters
+              </small>
+              <small
+                class="char-count"
+                [class.text-warning]="requestText.length > maxLength * 0.85"
+              >
+                {{ requestText.length }} / {{ maxLength }}
+              </small>
+            </div>
+
+            <div class="d-flex justify-content-center justify-content-md-end">
+              <button
+                class="btn send-btn rounded-pill px-4 px-md-5"
+                [disabled]="!requestText.trim() || requestText.trim().length < minLength"
+                (click)="sendRequest()"
+              >
+                <span class="icon-wrapper">
+                  <i class="bi bi-send-fill send-icon"></i>
+                </span>
+                <span class="btn-text">Send Request</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

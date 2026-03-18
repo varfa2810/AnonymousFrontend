@@ -1,0 +1,51 @@
+.app-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.app-background-pattern {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: minmax(90px, 1fr);
+  align-content: stretch;
+  justify-items: center;
+  align-items: center;
+  padding: 0.75rem;
+  gap: 1rem 0.5rem;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.app-background-pattern i {
+  font-size: clamp(2.3rem, 3.6vw, 3.6rem);
+  color: rgba(17, 24, 39, 0.2);
+  transform: rotate(-8deg);
+}
+
+.app-background-pattern i:nth-child(even) {
+  transform: rotate(8deg) translateY(10px);
+  color: rgba(17, 24, 39, 0.16);
+}
+
+@media (max-width: 991.98px) {
+  .app-background-pattern {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(82px, 1fr);
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .app-background-pattern {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: minmax(74px, 1fr);
+    gap: 0.75rem 0.35rem;
+  }
+
+  .app-background-pattern i {
+    font-size: clamp(1.9rem, 7vw, 2.6rem);
+  }
+}

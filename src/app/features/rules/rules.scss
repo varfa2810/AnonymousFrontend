@@ -1,0 +1,35 @@
+
+
+.rules-shell {
+  background: linear-gradient(160deg, #171b22 0%, #101319 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.rules-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  color: #ffc107;
+  background: rgba(255, 193, 7, 0.16);
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  box-shadow: 0 0 22px rgba(255, 193, 7, 0.28);
+}
+
+.rule-card {
+  background: linear-gradient(145deg, rgba(220, 53, 69, 0.16) 0%, rgba(220, 53, 69, 0.08) 100%);
+  border: 1px solid rgba(220, 53, 69, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.rule-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 193, 7, 0.55);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.rules-foot {
+  background: linear-gradient(140deg, rgba(255, 193, 7, 0.18), rgba(220, 53, 69, 0.16));
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}

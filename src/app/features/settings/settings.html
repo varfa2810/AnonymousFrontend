@@ -1,0 +1,106 @@
+<section class="settings-page py-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="card settings-shell border-0 rounded-4 overflow-hidden text-white">
+          <div class="card-body p-4 p-md-5">
+            <div class="settings-chip d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3">
+              <i class="bi bi-gear-fill"></i>
+              Settings
+            </div>
+
+            <h1 class="h2 fw-bold mb-2">Account Settings</h1>
+            <p class="text-light-emphasis mb-4">
+              Manage your account preferences and review the options available for your Anonymous profile.
+            </p>
+
+            <div class="row g-3">
+              <div class="col-12 col-lg-7">
+                <div class="settings-card rounded-4 p-3 p-md-4 h-100">
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="settings-icon"><i class="bi bi-person-badge-fill"></i></span>
+                    <div>
+                      <h2 class="h5 mb-1 fw-semibold">Change Username</h2>
+                      <p class="mb-0 text-light-emphasis small">
+                        Update your username carefully. You will need to remember the exact username
+                        you choose for future logins.
+                      </p>
+                    </div>
+                  </div>
+
+                  <label for="settingsUsername" class="form-label small text-light fw-semibold">
+                    New Username
+                  </label>
+                  <div class="input-group settings-input-group mb-2">
+                    <span class="input-group-text"><i class="bi bi-at"></i></span>
+                    <input
+                      id="settingsUsername"
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter a new username"
+                      [(ngModel)]="newUsername"
+                    />
+                  </div>
+                  <p class="mb-3 settings-helper-text">
+                    Pick a username that is easy for you to remember and safe to use publicly.
+                  </p>
+
+                  <button
+                    type="button"
+                    class="btn settings-primary-btn rounded-pill px-4"
+                    [disabled]="!newUsername.trim()"
+                  >
+                    <i class="bi bi-check2-circle me-2"></i>
+                    Update Username
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-5">
+                <div class="settings-danger rounded-4 p-3 p-md-4 h-100">
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="settings-danger-icon"><i class="bi bi-trash3-fill"></i></span>
+                    <div>
+                      <h2 class="h5 mb-1 fw-semibold text-white">Delete My Account</h2>
+                      <p class="mb-0 text-light-emphasis small">
+                        This action should permanently remove your account and related access.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="settings-danger-note rounded-4 p-3 mb-3">
+                    <p class="mb-1 fw-semibold text-white">Please review before deleting.</p>
+                    <p class="mb-0 small text-light-emphasis">
+                      Account deletion is sensitive and should include a final confirmation step
+                      once backend support is connected.
+                    </p>
+                  </div>
+
+                  <button type="button" class="btn settings-danger-btn rounded-pill px-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Delete My Account
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-note rounded-4 p-3 p-md-4 mt-4">
+              <p class="mb-1 fw-semibold text-white">Implementation note</p>
+              <p class="mb-0 text-light-emphasis">
+                These settings are now available in the interface. The next step is wiring them to
+                backend APIs for username updates and secure account deletion.
+              </p>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+              <a routerLink="/request" class="btn settings-secondary-btn rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Request
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
