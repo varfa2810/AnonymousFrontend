@@ -48,22 +48,34 @@ export class UserAuth {
     );
   }
 
-checkUniqueUsername(username: string): Observable<boolean> {
-  return this.httpclient
-    .get<BooleanApiResponse>(
-      `${this.baseUrl}/auth/CheckUniqueUsername?username=${encodeURIComponent(username)}`,
-    )
-    .pipe(
-      map((res) => !res.data),
-      catchError((err) => {
-        if (err.status === 404) {
-          return of(true);
-        }
+  checkUniqueUsername(username: string): Observable<boolean> {
+    return this.httpclient
+      .get<BooleanApiResponse>(
+        `${this.baseUrl}/auth/CheckUniqueUsername?username=${encodeURIComponent(username)}`,
+      )
+      .pipe(
+        map((res) => !res.data),
+        catchError((err) => {
+          if (err.status === 404) {
+            return of(true);
+          }
 
-        console.error('Username check failed', err);
-        return of(false);
-      }),
-    );
-}
+          console.error('Username check failed', err);
+          return of(false);
+        }),
+      );
+  }
+
+  deleteUser(userId: string | number): Observable<boolean> {
+    return this.httpclient
+      .delete<BooleanApiResponse | boolean>(`${this.baseUrl}/auth/deleteUser/${userId}`)
+      .pipe(
+        map((res) => (typeof res === 'boolean' ? res : !!res.data)),
+        catchError((err) => {
+          console.error('Delete user failed', err);
+          return of(false);
+        }),
+      );
+  }
 
 }

@@ -36,6 +36,12 @@ export const routes: Routes = [
     title: 'Settings',
     canActivate: [authGuard],
   },
+  {
+    path: 'about',
+    loadComponent: () => import('./features/about/about').then((m) => m.About),
+    title: 'About',
+    canActivate: [authGuard],
+  },
 
   {
     path: '**',
