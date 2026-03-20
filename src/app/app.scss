@@ -1,6 +1,8 @@
 .app-shell {
   position: relative;
   z-index: 1;
+  background: #000000;
+  min-height: 100vh;
 }
 
 .app-background-pattern {
@@ -21,13 +23,13 @@
 
 .app-background-pattern i {
   font-size: clamp(2.3rem, 3.6vw, 3.6rem);
-  color: rgba(17, 24, 39, 0.2);
+  color: rgba(148, 163, 184, 0.24);
   transform: rotate(-8deg);
 }
 
 .app-background-pattern i:nth-child(even) {
   transform: rotate(8deg) translateY(10px);
-  color: rgba(17, 24, 39, 0.16);
+  color: rgba(148, 163, 184, 0.18);
 }
 
 @media (max-width: 991.98px) {

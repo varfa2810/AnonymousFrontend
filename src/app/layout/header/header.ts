@@ -1,16 +1,20 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UserAuth } from '../../core/services/user-auth';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule],
+  imports: [RouterModule, ConfirmPopupModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
+  providers: [ConfirmationService],
 })
 export class Header {
   private authService = inject(UserAuth);
   private router = inject(Router);
+  private confirmationService = inject(ConfirmationService);
 
   username = this.authService.username;
   userid = this.authService.userId;
@@ -49,23 +53,35 @@ export class Header {
     }
   }
 
-  onLogoutFromMenu() {
-    this.onNavClick();
-    this.onLogout();
-  }
+  logout(event: Event) {
+    event.stopPropagation();
 
-  onLogout() {
-    if (confirm('Are you sure you want to logout?')) {
-      this.authService.logout().subscribe({
-        next: (res) => {
-          if (res.data == true) {
-            this.router.navigate(['/login']);
-          }
-        },
-        error: (err) => {
-          console.error('logout failed', err);
-        },
-      });
-    }
+    this.confirmationService.confirm({
+      target: event.currentTarget as EventTarget,
+      message: 'Are you sure you want to logout from your account?',
+      icon: 'pi pi-sign-out',
+      rejectButtonProps: {
+        label: 'Stay',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Logout',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.onNavClick();
+        this.authService.logout().subscribe({
+          next: (res) => {
+            if (res.data == true) {
+              this.router.navigate(['/login']);
+            }
+          },
+          error: (err) => {
+            console.error('logout failed', err);
+          },
+        });
+      },
+    });
   }
 }

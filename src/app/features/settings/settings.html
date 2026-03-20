@@ -4,6 +4,9 @@
       <div class="col-12 col-lg-10">
         <div class="card settings-shell border-0 rounded-4 overflow-hidden text-white">
           <div class="card-body p-4 p-md-5">
+            <p-toast />
+            <p-confirmpopup />
+
             <div class="settings-chip d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3">
               <i class="bi bi-gear-fill"></i>
               Settings
@@ -28,31 +31,62 @@
                     </div>
                   </div>
 
-                  <label for="settingsUsername" class="form-label small text-light fw-semibold">
-                    New Username
-                  </label>
-                  <div class="input-group settings-input-group mb-2">
-                    <span class="input-group-text"><i class="bi bi-at"></i></span>
-                    <input
-                      id="settingsUsername"
-                      type="text"
-                      class="form-control"
-                      placeholder="Enter a new username"
-                      [(ngModel)]="newUsername"
-                    />
-                  </div>
-                  <p class="mb-3 settings-helper-text">
-                    Pick a username that is easy for you to remember and safe to use publicly.
-                  </p>
+                  <form [formGroup]="usernameForm" (ngSubmit)="onSubmit()" novalidate>
+                    <label for="settingsUsername" class="form-label small text-light fw-semibold">
+                      New Username
+                    </label>
+                    <div class="input-group settings-input-group mb-2">
+                      <span class="input-group-text"><i class="bi bi-at"></i></span>
+                      <input
+                        id="settingsUsername"
+                        type="text"
+                        class="form-control"
+                        formControlName="newUsername"
+                        placeholder="Enter a new username"
+                        [class.is-invalid]="
+                          hasError('newUsername', 'required') ||
+                          hasError('newUsername', 'minlength') ||
+                          hasError('newUsername', 'usernameTaken')
+                        "
+                      />
+                    </div>
 
-                  <button
-                    type="button"
-                    class="btn settings-primary-btn rounded-pill px-4"
-                    [disabled]="!newUsername.trim()"
-                  >
-                    <i class="bi bi-check2-circle me-2"></i>
-                    Update Username
-                  </button>
+                    @if (hasError('newUsername', 'required')) {
+                      <small class="field-error d-block mt-1">Username is required.</small>
+                    }
+                    @if (hasError('newUsername', 'minlength')) {
+                      <small class="field-error d-block mt-1">Username must be at least 3 characters.</small>
+                    }
+                    @if (hasError('newUsername', 'usernameTaken')) {
+                      <small class="field-error d-block mt-1">This username is already taken.</small>
+                    }
+                    @if (isCheckingUsername) {
+                      <small class="settings-helper-text d-block mt-1">Checking username availability...</small>
+                    }
+                    @if (isUsernameAvailable) {
+                      <small class="field-success d-block mt-1">This username is available.</small>
+                    }
+                    @if (
+                      !hasError('newUsername', 'required') &&
+                      !hasError('newUsername', 'minlength') &&
+                      !hasError('newUsername', 'usernameTaken') &&
+                      !isCheckingUsername &&
+                      !isUsernameAvailable
+                    ) {
+                      <p class="mb-3 mt-1 settings-helper-text">
+                        Pick a username that is easy for you to remember and safe to use publicly.
+                      </p>
+                    }
+
+                    <button
+                      type="submit"
+                      class="btn settings-primary-btn rounded-pill px-4"
+                      [disabled]="usernameForm.invalid || isCheckingUsername"
+                    >
+                      <i class="bi bi-check2-circle me-2"></i>
+                      Update Username
+                    </button>
+                  </form>
                 </div>
               </div>
 
@@ -76,9 +110,14 @@
                     </p>
                   </div>
 
-                  <button type="button" class="btn settings-danger-btn rounded-pill px-4">
+                  <button
+                    type="button"
+                    class="btn settings-danger-btn rounded-pill px-4"
+                    [disabled]="isDeletingAccount"
+                    (click)="confirmDeleteAccount($event)"
+                  >
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    Delete My Account
+                    {{ isDeletingAccount ? 'Deleting Account...' : 'Delete My Account' }}
                   </button>
                 </div>
               </div>
