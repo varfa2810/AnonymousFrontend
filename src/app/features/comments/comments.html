@@ -1,161 +1,140 @@
-<section class="pt-2 pb-3">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-10">
-        @if (isLoading()) {
-          <div
-            class="card loading-state-card border-0 shadow rounded-4 text-white overflow-hidden mb-3"
-          >
-            <div class="card-body p-4 p-md-5 text-center">
-              <div class="spinner-border text-warning mb-3" role="status" aria-hidden="true"></div>
-              <h3 class="fw-bold mb-2">Loading Comments</h3>
-              <p class="text-light-emphasis mb-0">Fetching latest messages for you...</p>
-            </div>
-          </div>
-        } @else if (comments.length == 0) {
-          <div
-            class="card empty-state-card border-0 shadow rounded-4 text-white overflow-hidden mb-3"
-          >
-            <div class="card-body p-4 p-md-5 text-center">
-              <div class="empty-icon mx-auto mb-3">
-                <i class="bi bi-chat-square-heart"></i>
-              </div>
-              <h3 class="fw-bold mb-2">No Comments Yet</h3>
-              <p class="text-light-emphasis mb-3">
-                Be the first to start the conversation. Your message can help someone.
-              </p>
-              <a routerLink="/request" class="btn btn-warning rounded-pill px-4">
-                <i class="bi bi-send-fill me-2"></i>
-                Post First Comment
-              </a>
-            </div>
-          </div>
-        } @else {
-          @for (commentData of comments; track commentData.messageId) {
-            <div
-              class="card comment-card border-0 shadow rounded-4 text-white overflow-hidden mb-3"
-              [class.golden-comment-card]="isGoldenComment(commentData)"
-            >
-              @if (isGoldenComment(commentData)) {
-                <span class="golden-shine" aria-hidden="true"></span>
-              }
-              <div class="card-body pt-3 pb-4 px-4 px-md-5 position-relative">
-                @if (getReactionCount(commentData, 'Like') >= bannerLikeThreshold) {
-                  <div
-                    class="golden-note rounded-3 p-3 mb-3 text-center"
-                    [class.golden-note-static]="isGoldenComment(commentData)"
-                  >
-                    @if (!isGoldenComment(commentData)) {
-                      <p class="mb-0 fw-semibold text-light small">
-                        <i class="bi bi-stars me-2 text-warning"></i>
-                        {{ likesAwayFromGolden(commentData) }} like{{
-                          likesAwayFromGolden(commentData) === 1 ? '' : 's'
-                        }}
-                        away from Golden Comment.
-                      </p>
-                    } @else {
-                      <p class="mb-0 fw-semibold text-light small">
-                        <i class="bi bi-trophy-fill me-2 text-warning"></i>
-                        Golden comment unlocked. This comment is now shining.
-                      </p>
-                    } 
-                  </div>
+<section class="comments-page">
+  <div class="comments-shell">
+    @if (isLoading()) {
+      <div class="comments-state comments-state--loading">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <h2>Loading Comments</h2>
+        <p>Fetching the latest encrypted entries for the vault.</p>
+      </div>
+    } @else if (comments.length == 0) {
+      <div class="comments-state comments-state--empty">
+        <div class="comments-state__icon">
+          <i class="bi bi-chat-square-heart"></i>
+        </div>
+        <h2>No Comments Yet</h2>
+        <p>Be the first to open the conversation. Your message can set the tone for the room.</p>
+        <a routerLink="/request" class="comments-state__cta">
+          <i class="bi bi-send-fill"></i>
+          <span>Post First Comment</span>
+        </a>
+      </div>
+    } @else {
+      @for (commentData of comments; track commentData.messageId; let first = $first) {
+        <article
+          class="comment-card"
+          [class.comment-card--golden]="isGoldenComment(commentData)"
+          [class.comment-card--primary]="first"
+        >
+          @if (isGoldenComment(commentData)) {
+            <span class="golden-shine" aria-hidden="true"></span>
+          }
+
+          <header class="comment-card__header">
+            <div class="comment-card__identity">
+              <span class="comment-card__id">
+                @if (isGoldenComment(commentData)) {
+                  <i class="bi bi-star-fill"></i>
                 }
+                #{{ commentData.messageId }}
+              </span>
+              <h2>Sovereign Vault Entry</h2>
+            </div>
 
-                <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
-                  <span
-                    class="badge fs-6"
-                    [class.golden-id]="isGoldenComment(commentData)"
-                    [class.text-bg-danger]="!isGoldenComment(commentData)"
-                  >
-                    @if (isGoldenComment(commentData)) {
-                      <i class="bi bi-star-fill me-1"></i>
-                    }
-                    #{{ commentData.messageId }}
-                  </span>
-                  <small class="text-white fst-italic ms-md-auto"
-                    >Created: {{ formatCreatedDate(commentData.createdDate) }}</small
-                  >
-                </div>
+            <div class="comment-card__time">
+              <i class="bi bi-clock-fill"></i>
+              <span>{{ formatCreatedDate(commentData.createdDate) }}</span>
+            </div>
+          </header>
 
-                <h3 class="h6 fw-semibold text-light-emphasis mb-2">Message</h3>
-                <p class="text-light mb-3">{{ commentData.message }}</p>
-
-                <div class="d-flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-sm rounded-pill px-3"
-                    [class.reaction-active]="commentData.isUserLiked"
-                    [class.reaction-like-burst]="isReactionAnimating(commentData.messageId, 1)"
-                    (click)="reactComments(commentData.messageId, 1)"
-                  >
-                    <i
-                      class="bi me-1 text-success"
-                      [class.bi-hand-thumbs-up-fill]="commentData.isUserLiked"
-                      [class.bi-hand-thumbs-up]="!commentData.isUserLiked"
-                    ></i>
-                    <span class="badge text-bg-success ms-2">{{
-                      getReactionCount(commentData, 'Like')
-                    }}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-sm rounded-pill px-3"
-                    [class.reaction-active]="commentData.isUserDisliked"
-                    [class.reaction-dislike-burst]="isReactionAnimating(commentData.messageId, 2)"
-                    (click)="reactComments(commentData.messageId, 2)"
-                  >
-                    <i
-                      class="bi me-1 text-danger"
-                      [class.bi-hand-thumbs-down-fill]="commentData.isUserDisliked"
-                      [class.bi-hand-thumbs-down]="!commentData.isUserDisliked"
-                    ></i>
-                    <span class="badge text-bg-danger ms-2">{{
-                      getReactionCount(commentData, 'Dislike')
-                    }}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-sm rounded-pill px-3"
-                    [class.reaction-active]="commentData.isUserLoved"
-                    [class.reaction-heart-burst]="isReactionAnimating(commentData.messageId, 3)"
-                    (click)="reactComments(commentData.messageId, 3)"
-                  >
-                    <i
-                      class="bi me-1 text-danger"
-                      [class.bi-heart-fill]="commentData.isUserLoved"
-                      [class.bi-heart]="!commentData.isUserLoved"
-                    ></i>
-                    <span class="badge text-bg-danger ms-2">{{
-                      getReactionCount(commentData, 'Heart')
-                    }}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-sm rounded-pill px-3"
-                    [class.reaction-active]="commentData.isUserParty"
-                    [class.reaction-party-burst]="isReactionAnimating(commentData.messageId, 4)"
-                    (click)="reactComments(commentData.messageId, 4)"
-                  >
-                    <i
-                      class="bi me-1 text-warning"
-                      [class.bi-cone-striped]="commentData.isUserParty"
-                      [class.bi-cone]="!commentData.isUserParty"
-                    ></i>
-                    <span class="badge text-bg-warning ms-2">{{
-                      getReactionCount(commentData, 'Party')
-                    }}</span>
-                  </button>
-                </div>
-              </div>
+          @if (getReactionCount(commentData, 'Like') >= bannerLikeThreshold) {
+            <div class="golden-note" [class.golden-note-static]="isGoldenComment(commentData)">
+              @if (!isGoldenComment(commentData)) {
+                <p>
+                  <i class="bi bi-stars"></i>
+                  {{ likesAwayFromGolden(commentData) }} like{{
+                    likesAwayFromGolden(commentData) === 1 ? '' : 's'
+                  }}
+                  away from Golden Comment.
+                </p>
+              } @else {
+                <p>
+                  <i class="bi bi-trophy-fill"></i>
+                  Golden Comment unlocked. This entry is now in spotlight.
+                </p>
+              }
             </div>
           }
-        }
-      </div>
-    </div>
+
+          <div class="comment-card__message">
+            <p>{{ commentData.message }}</p>
+          </div>
+
+          <footer class="comment-card__footer">
+            <div class="comment-reactions">
+              <button
+                type="button"
+                class="reaction-pill"
+                [class.reaction-active]="commentData.isUserLiked"
+                [class.reaction-like-burst]="isReactionAnimating(commentData.messageId, 1)"
+                (click)="reactComments(commentData.messageId, 1)"
+              >
+                <i
+                  class="bi"
+                  [class.bi-hand-thumbs-up-fill]="commentData.isUserLiked"
+                  [class.bi-hand-thumbs-up]="!commentData.isUserLiked"
+                ></i>
+                <span>{{ getReactionCount(commentData, 'Like') }}</span>
+              </button>
+
+              <button
+                type="button"
+                class="reaction-pill"
+                [class.reaction-active]="commentData.isUserDisliked"
+                [class.reaction-dislike-burst]="isReactionAnimating(commentData.messageId, 2)"
+                (click)="reactComments(commentData.messageId, 2)"
+              >
+                <i
+                  class="bi"
+                  [class.bi-hand-thumbs-down-fill]="commentData.isUserDisliked"
+                  [class.bi-hand-thumbs-down]="!commentData.isUserDisliked"
+                ></i>
+                <span>{{ getReactionCount(commentData, 'Dislike') }}</span>
+              </button>
+
+              <button
+                type="button"
+                class="reaction-pill reaction-pill--heart"
+                [class.reaction-active]="commentData.isUserLoved"
+                [class.reaction-heart-burst]="isReactionAnimating(commentData.messageId, 3)"
+                (click)="reactComments(commentData.messageId, 3)"
+              >
+                <i
+                  class="bi"
+                  [class.bi-heart-fill]="commentData.isUserLoved"
+                  [class.bi-heart]="!commentData.isUserLoved"
+                ></i>
+                <span>{{ getReactionCount(commentData, 'Heart') }}</span>
+              </button>
+
+              <button
+                type="button"
+                class="reaction-pill"
+                [class.reaction-active]="commentData.isUserParty"
+                [class.reaction-party-burst]="isReactionAnimating(commentData.messageId, 4)"
+                (click)="reactComments(commentData.messageId, 4)"
+              >
+                <i
+                  class="bi"
+                  [class.bi-cone-striped]="commentData.isUserParty"
+                  [class.bi-cone]="!commentData.isUserParty"
+                ></i>
+                <span>{{ getReactionCount(commentData, 'Party') }}</span>
+              </button>
+            </div>
+          </footer>
+        </article>
+      }
+    }
   </div>
 
   @if (showScrollTop()) {

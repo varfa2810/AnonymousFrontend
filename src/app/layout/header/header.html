@@ -1,14 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark app-header py-2 py-lg-3">
-  <div class="container">
-    <a class="navbar-brand app-brand fw-bold d-flex align-items-center gap-2" routerLink="/request">
-      <span class="brand-icon d-inline-flex align-items-center justify-content-center">
-        <i class="bi bi-incognito"></i>
+<nav class="navbar navbar-expand-xl navbar-dark app-header">
+  <div class="container app-header__inner">
+    <a class="navbar-brand app-brand" routerLink="/request" (click)="onNavClick()">
+      <span class="brand-icon">
+        <i class="bi bi-shield-lock-fill"></i>
       </span>
-      <span>Anonymous</span>
+      <span class="brand-wordmark">Anonymous</span>
     </a>
 
     <button
-      class="navbar-toggler border-0 p-2"
+      class="navbar-toggler app-header-toggler"
       type="button"
       aria-controls="mainNavbar"
       [attr.aria-expanded]="isNavbarOpen"
@@ -19,84 +19,85 @@
     </button>
 
     <div class="collapse navbar-collapse" id="mainNavbar" [class.show]="isNavbarOpen">
-      <ul class="navbar-nav gap-2 gap-lg-3 text-center align-items-center mx-auto py-3 py-lg-0">
+      <ul class="navbar-nav app-nav-list">
         <li class="nav-item">
           <a
-            class="nav-link app-nav-link fs-6 fw-semibold px-3 py-2 rounded-pill"
+            class="nav-link app-nav-link"
             routerLink="/request"
             routerLinkActive="active-link"
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="onNavClick()"
           >
-            <i class="bi bi-send me-2"></i> Request
+            <i class="bi bi-send app-nav-link__icon"></i>
+            Request
           </a>
         </li>
 
         <li class="nav-item">
           <a
-            class="nav-link app-nav-link fs-6 fw-semibold px-3 py-2 rounded-pill"
+            class="nav-link app-nav-link"
             routerLink="/comments"
             routerLinkActive="active-link"
             (click)="onCommentsNavClick($event)"
           >
-            <i class="bi bi-chat-dots me-2"></i>All Comments
+            <i class="bi bi-chat-dots app-nav-link__icon"></i>
+            All Comments
           </a>
         </li>
 
         <li class="nav-item">
           <a
-            class="nav-link app-nav-link fs-6 fw-semibold px-3 py-2 rounded-pill"
+            class="nav-link app-nav-link"
             routerLink="/my-comments"
             routerLinkActive="active-link"
             (click)="onNavClick()"
           >
-            <i class="bi bi-chat-left-text me-2"></i> My Comments
+            <i class="bi bi-chat-left-text app-nav-link__icon"></i>
+            My Comments
           </a>
         </li>
 
         <li class="nav-item">
           <a
-            class="nav-link app-nav-link fs-6 fw-semibold px-3 py-2 rounded-pill"
+            class="nav-link app-nav-link"
             routerLink="/rules"
             routerLinkActive="active-link"
             (click)="onNavClick()"
           >
-            <i class="bi bi-shield-check me-2"></i> Rules
+            <i class="bi bi-shield-check app-nav-link__icon"></i>
+            Rules
           </a>
         </li>
 
         <li class="nav-item">
           <a
-            class="nav-link app-nav-link fs-6 fw-semibold px-3 py-2 rounded-pill"
+            class="nav-link app-nav-link"
             routerLink="/about"
             routerLinkActive="active-link"
             (click)="onNavClick()"
           >
-            <i class="bi bi-stars me-2"></i> About
+            <i class="bi bi-info-circle app-nav-link__icon"></i>
+            About
           </a>
         </li>
       </ul>
 
-      <div
-        class="d-flex justify-content-end mt-3 mt-lg-0 app-user-menu"
-        (click)="$event.stopPropagation()"
-      >
+      <div class="app-user-menu" (click)="$event.stopPropagation()">
         <div class="position-relative">
           <button
             type="button"
-            class="btn app-action-btn app-user-btn rounded-pill px-3 d-flex align-items-center"
+            class="btn app-user-btn"
             [attr.aria-expanded]="isUserMenuOpen"
             (click)="toggleUserMenu($event)"
           >
-            <span class="d-flex align-items-center gap-2">
+            <div class="app-user-btn__copy">
+              <span class="app-user-btn__eyebrow">Authorized</span>
+              <span class="app-user-btn__name">Welcome, {{ username() || 'User' }}</span>
+            </div>
+
+            <span class="app-user-btn__avatar">
               <i class="bi bi-person-circle"></i>
-              <span class="fw-semibold text-truncate">Welcome, {{ username() || 'Username' }}</span>
             </span>
-            <i
-              class="bi"
-              [class.bi-chevron-up]="isUserMenuOpen"
-              [class.bi-chevron-down]="!isUserMenuOpen"
-            ></i>
           </button>
 
           <div

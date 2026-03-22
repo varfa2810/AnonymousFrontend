@@ -1,145 +1,134 @@
-<section class="settings-page py-1">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-10">
-        <div class="card settings-shell border-0 rounded-4 overflow-hidden text-white">
-          <div class="card-body p-4 p-md-5">
-            <p-toast />
-            <p-confirmpopup />
+<section class="settings-page">
+  <div class="settings-shell">
+    <p-toast />
+    <p-confirmpopup />
 
-            <div class="settings-chip d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3">
-              <i class="bi bi-gear-fill"></i>
-              Settings
-            </div>
+    <div class="settings-hero">
+      <h1>Account Settings</h1>
+      <p>Manage your sovereign identity and security protocols within the vault.</p>
+    </div>
 
-            <h1 class="h2 fw-bold mb-2">Account Settings</h1>
-            <p class="text-light-emphasis mb-4">
-              Manage your account preferences and review the options available for your Anonymous profile.
-            </p>
-
-            <div class="row g-3">
-              <div class="col-12 col-lg-7">
-                <div class="settings-card rounded-4 p-3 p-md-4 h-100">
-                  <div class="d-flex align-items-center gap-3 mb-3">
-                    <span class="settings-icon"><i class="bi bi-person-badge-fill"></i></span>
-                    <div>
-                      <h2 class="h5 mb-1 fw-semibold">Change Username</h2>
-                      <p class="mb-0 text-light-emphasis small">
-                        Update your username carefully. You will need to remember the exact username
-                        you choose for future logins.
-                      </p>
-                    </div>
-                  </div>
-
-                  <form [formGroup]="usernameForm" (ngSubmit)="onSubmit()" novalidate>
-                    <label for="settingsUsername" class="form-label small text-light fw-semibold">
-                      New Username
-                    </label>
-                    <div class="input-group settings-input-group mb-2">
-                      <span class="input-group-text"><i class="bi bi-at"></i></span>
-                      <input
-                        id="settingsUsername"
-                        type="text"
-                        class="form-control"
-                        formControlName="newUsername"
-                        placeholder="Enter a new username"
-                        [class.is-invalid]="
-                          hasError('newUsername', 'required') ||
-                          hasError('newUsername', 'minlength') ||
-                          hasError('newUsername', 'usernameTaken')
-                        "
-                      />
-                    </div>
-
-                    @if (hasError('newUsername', 'required')) {
-                      <small class="field-error d-block mt-1">Username is required.</small>
-                    }
-                    @if (hasError('newUsername', 'minlength')) {
-                      <small class="field-error d-block mt-1">Username must be at least 3 characters.</small>
-                    }
-                    @if (hasError('newUsername', 'usernameTaken')) {
-                      <small class="field-error d-block mt-1">This username is already taken.</small>
-                    }
-                    @if (isCheckingUsername) {
-                      <small class="settings-helper-text d-block mt-1">Checking username availability...</small>
-                    }
-                    @if (isUsernameAvailable) {
-                      <small class="field-success d-block mt-1">This username is available.</small>
-                    }
-                    @if (
-                      !hasError('newUsername', 'required') &&
-                      !hasError('newUsername', 'minlength') &&
-                      !hasError('newUsername', 'usernameTaken') &&
-                      !isCheckingUsername &&
-                      !isUsernameAvailable
-                    ) {
-                      <p class="mb-3 mt-1 settings-helper-text">
-                        Pick a username that is easy for you to remember and safe to use publicly.
-                      </p>
-                    }
-
-                    <button
-                      type="submit"
-                      class="btn settings-primary-btn rounded-pill px-4"
-                      [disabled]="usernameForm.invalid || isCheckingUsername"
-                    >
-                      <i class="bi bi-check2-circle me-2"></i>
-                      Update Username
-                    </button>
-                  </form>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-5">
-                <div class="settings-danger rounded-4 p-3 p-md-4 h-100">
-                  <div class="d-flex align-items-center gap-3 mb-3">
-                    <span class="settings-danger-icon"><i class="bi bi-trash3-fill"></i></span>
-                    <div>
-                      <h2 class="h5 mb-1 fw-semibold text-white">Delete My Account</h2>
-                      <p class="mb-0 text-light-emphasis small">
-                        This action should permanently remove your account and related access.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="settings-danger-note rounded-4 p-3 mb-3">
-                    <p class="mb-1 fw-semibold text-white">Please review before deleting.</p>
-                    <p class="mb-0 small text-light-emphasis">
-                      Account deletion is sensitive and should include a final confirmation step
-                      once backend support is connected.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    class="btn settings-danger-btn rounded-pill px-4"
-                    [disabled]="isDeletingAccount"
-                    (click)="confirmDeleteAccount($event)"
-                  >
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    {{ isDeletingAccount ? 'Deleting Account...' : 'Delete My Account' }}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="settings-note rounded-4 p-3 p-md-4 mt-4">
-              <p class="mb-1 fw-semibold text-white">Implementation note</p>
-              <p class="mb-0 text-light-emphasis">
-                These settings are now available in the interface. The next step is wiring them to
-                backend APIs for username updates and secure account deletion.
-              </p>
-            </div>
-
-            <div class="d-flex justify-content-end mt-4">
-              <a routerLink="/request" class="btn settings-secondary-btn rounded-pill px-4">
-                <i class="bi bi-arrow-left me-2"></i>
-                Back to Request
-              </a>
-            </div>
-          </div>
+    <div class="settings-content">
+      <div class="settings-search">
+        <label for="settingsSearch" class="settings-search__label">Search Settings</label>
+        <div class="settings-search__wrap">
+          <i class="bi bi-search"></i>
+          <input
+            id="settingsSearch"
+            type="text"
+            placeholder="Search settings..."
+            [value]="settingsSearch"
+            (input)="updateSettingsSearch($event)"
+          />
         </div>
       </div>
+
+      @if (shouldShowCard('reset username')) {
+      <article class="settings-card">
+        <div class="settings-card__head">
+          <span class="settings-card__icon">
+            <i class="bi bi-bag-check"></i>
+          </span>
+          <div>
+            <h2>Reset Username</h2>
+            <p>Update your public identity within the community.</p>
+          </div>
+        </div>
+
+        <form [formGroup]="usernameForm" (ngSubmit)="onSubmit()" novalidate>
+          <label for="settingsUsername" class="settings-label">Username</label>
+          <div class="settings-input-wrap">
+            <input
+              id="settingsUsername"
+              type="text"
+              formControlName="newUsername"
+              placeholder="Enter a new username"
+              [class.is-invalid]="
+                hasError('newUsername', 'required') ||
+                hasError('newUsername', 'minlength') ||
+                hasError('newUsername', 'usernameTaken')
+              "
+            />
+          </div>
+
+          @if (hasError('newUsername', 'required')) {
+            <small class="field-error">Username is required.</small>
+          }
+          @if (hasError('newUsername', 'minlength')) {
+            <small class="field-error">Username must be at least 3 characters.</small>
+          }
+          @if (hasError('newUsername', 'usernameTaken')) {
+            <small class="field-error">This username is already taken.</small>
+          }
+          @if (isCheckingUsername) {
+            <small class="settings-helper-text">Checking username availability...</small>
+          }
+          @if (isUsernameAvailable) {
+            <small class="field-success">This username is available.</small>
+          }
+          @if (
+            !hasError('newUsername', 'required') &&
+            !hasError('newUsername', 'minlength') &&
+            !hasError('newUsername', 'usernameTaken') &&
+            !isCheckingUsername &&
+            !isUsernameAvailable
+          ) {
+            <p class="settings-helper-copy">
+              Choose a username you can remember easily and feel comfortable using publicly.
+            </p>
+          }
+
+          <button
+            type="submit"
+            class="settings-primary-btn"
+            [disabled]="usernameForm.invalid || isCheckingUsername"
+          >
+            Update Username
+          </button>
+        </form>
+      </article>
+      }
+
+      @if (shouldShowCard('delete account')) {
+      <article class="settings-card settings-card--danger">
+        <div class="settings-card__head">
+          <span class="settings-card__icon settings-card__icon--danger">
+            <i class="bi bi-shield-lock"></i>
+          </span>
+          <div>
+            <h2>Delete Account</h2>
+            <p>Permanent account removal and critical security action.</p>
+          </div>
+        </div>
+
+        <div class="settings-danger-note">
+          <h3>Danger Zone: Delete Account</h3>
+          <p>
+            Deleting your account is permanent and cannot be reversed. Your account access and
+            associated platform presence will be removed.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="settings-danger-btn"
+          [disabled]="isDeletingAccount"
+          (click)="confirmDeleteAccount($event)"
+        >
+          {{ isDeletingAccount ? 'Deleting Account...' : 'Delete My Account' }}
+        </button>
+      </article>
+      }
+
+      @if (!shouldShowCard('reset username') && !shouldShowCard('delete account')) {
+        <div class="settings-empty">
+          <p>No settings matched your search.</p>
+        </div>
+      }
+    </div>
+
+    <div class="settings-footer">
+      <a routerLink="/request" class="settings-secondary-btn">Back to Request</a>
     </div>
   </div>
 </section>
