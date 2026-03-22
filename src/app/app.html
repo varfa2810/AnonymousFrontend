@@ -36,8 +36,8 @@
     </div>
   }
 
-  <main class="flex-fill">
-    <div class="container py-4">
+  <main class="flex-fill" [class.app-main-immersive]="isImmersiveRoute()">
+    <div [class]="getRouteShellClass()">
       <router-outlet></router-outlet>
     </div>
   </main>

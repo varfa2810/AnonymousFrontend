@@ -1,78 +1,97 @@
-<section class="request-page py-1">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-11 col-xl-12">
-        <div class="card dark-card border-0 rounded-4 overflow-hidden">
-          <div class="card-body p-4 text-white">
-            <div
-              class="request-badge d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 mb-3"
+<section class="request-page">
+  <div class="request-shell">
+    <div class="request-main">
+      <div class="request-hero">
+        <h1 class="request-hero__title">
+          Submit Your
+          <span>Message</span>
+        </h1>
+        <p class="request-hero__copy">
+          Share your thoughts, requests, or secrets within the sanctuary. Your voice is protected,
+          your identity is sovereign.
+        </p>
+      </div>
+
+      <div class="request-composer">
+        <label for="requestInput" class="request-composer__label">Your Entry</label>
+
+        <div class="request-composer__field">
+          <textarea
+            class="request-textarea"
+            id="requestInput"
+            rows="7"
+            [(ngModel)]="requestText"
+            [maxlength]="maxLength"
+            placeholder="Type your request here..."
+          ></textarea>
+        </div>
+
+        <div class="request-composer__footer">
+          <div class="request-meta">
+            <span><i class="bi bi-eye-slash"></i> Identity Encrypted</span>
+            <span><i class="bi bi-shield-lock"></i> Sovereign Layer</span>
+          </div>
+
+          <div class="request-actions">
+            <span class="request-count" [class.request-count--warn]="requestText.length > maxLength * 0.85">
+              {{ requestText.length }} / {{ maxLength }}
+            </span>
+
+            <button
+              class="request-submit"
+              [disabled]="!requestText.trim() || requestText.trim().length < minLength"
+              (click)="sendRequest()"
             >
-              <i class="bi bi-incognito"></i>
-              Anonymous Mode
-            </div>
-
-            <h2 class="fw-bold mb-2 heading-title">
-              <i class="bi bi-chat-left-dots-fill me-2 text-success"></i>
-              Submit Your Message
-            </h2>
-            <p class="text-light-emphasis mb-3">
-              Speak freely. Your identity stays private while your message reaches the community.
-            </p>
-
-            <div class="golden-request-note rounded-4 p-3 mb-3 text-white">
-              <p class="mb-1 fw-bold">
-                <i class="bi bi-stars me-2 text-warning"></i>
-                Golden Spotlight
-              </p>
-              <p class="mb-0 small">
-                Messages that earn <span class="fw-bold text-warning">20 likes</span> unlock
-                <span class="fw-bold text-warning">Golden Comment</span> status and stand out at
-                the top of the conversation.
-              </p>
-            </div>
-
-            <div class="mb-3">
-              <label for="requestInput" class="form-label text-light fw-semibold">
-                Write your anonymous request
-              </label>
-              <textarea
-                class="form-control custom-textarea"
-                id="requestInput"
-                rows="7"
-                [(ngModel)]="requestText"
-                [maxlength]="maxLength"
-                
-                placeholder="Type your request here..."
-              ></textarea>
-            </div>
-
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-              <small class="text-light-emphasis">
-                Min {{ minLength }} / Max {{ maxLength }} characters
-              </small>
-              <small
-                class="char-count"
-                [class.text-warning]="requestText.length > maxLength * 0.85"
-              >
-                {{ requestText.length }} / {{ maxLength }}
-              </small>
-            </div>
-
-            <div class="d-flex justify-content-center justify-content-md-end">
-              <button
-                class="btn send-btn rounded-pill px-4 px-md-5"
-                [disabled]="!requestText.trim() || requestText.trim().length < minLength"
-                (click)="sendRequest()"
-              >
-                <span class="icon-wrapper">
-                  <i class="bi bi-send-fill send-icon"></i>
-                </span>
-                <span class="btn-text">Send Request</span>
-              </button>
-            </div>
+              <span>Send Request</span>
+              <i class="bi bi-send-fill"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <aside class="request-sidebar">
+      <article class="request-card request-card--spotlight">
+        <span class="request-card__pill">
+          <i class="bi bi-star-fill"></i>
+          Golden Spotlight
+        </span>
+
+        <h2>Ascend to Sovereign Status</h2>
+        <p>
+          Messages that resonate with the collective earn
+          <strong>Golden Comment</strong>
+          status.
+        </p>
+
+        <div class="spotlight-metric">
+          <div class="spotlight-metric__score">20</div>
+          <div class="spotlight-metric__body">
+            <h3>Like Threshold</h3>
+            <p>Reach 20 likes to unlock the vault spotlight and premium visibility.</p>
+          </div>
+        </div>
+
+        <div class="spotlight-avatars" aria-hidden="true">
+          <span>R</span>
+          <span>S</span>
+          <span>A</span>
+          <span>+12</span>
+        </div>
+      </article>
+
+      <article class="request-card request-card--rules">
+        <h2>
+          <i class="bi bi-shield-check"></i>
+          Protocol Rules
+        </h2>
+
+        <ul>
+          <li>No identifiable personal data is permitted in submissions.</li>
+          <li>Respect the sanctuary. Hate speech or harassment leads to immediate ban.</li>
+          <li>All messages are permanently encrypted upon submission.</li>
+        </ul>
+      </article>
+    </aside>
   </div>
 </section>

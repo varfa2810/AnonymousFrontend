@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserAuth } from '../../core/services/user-auth';
 import { SendMessageService } from '../../core/services/send-message-service';
-import { log } from 'console';
 
 @Component({
   selector: 'app-request',

@@ -46,6 +46,7 @@ export class Settings {
 
   submitted = false;
   isDeletingAccount = false;
+  settingsSearch = '';
 
   usernameForm = this.formBuilder.group({
     newUsername: this.formBuilder.control(this.userAuth.username() ?? '', {
@@ -81,6 +82,18 @@ export class Settings {
 
   get newUsernameControl() {
     return this.usernameForm.get('newUsername');
+  }
+
+  updateSettingsSearch(event: Event) {
+    this.settingsSearch = (event.target as HTMLInputElement).value.trim().toLowerCase();
+  }
+
+  shouldShowCard(title: string): boolean {
+    if (!this.settingsSearch) {
+      return true;
+    }
+
+    return title.toLowerCase().includes(this.settingsSearch);
   }
 
   onSubmit() {
