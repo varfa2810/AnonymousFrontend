@@ -169,7 +169,7 @@ export class Settings {
 
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 600);
+        }, 1600);
       },
       error: () => {
         this.isDeletingAccount = false;
