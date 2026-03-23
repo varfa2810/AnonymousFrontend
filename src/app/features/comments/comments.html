@@ -37,7 +37,6 @@
                 }
                 #{{ commentData.messageId }}
               </span>
-              <h2>Sovereign Vault Entry</h2>
             </div>
 
             <div class="comment-card__time">
@@ -130,8 +129,123 @@
                 ></i>
                 <span>{{ getReactionCount(commentData, 'Party') }}</span>
               </button>
+
+              <button
+                type="button"
+                class="comment-thread-toggle"
+                [class.comment-thread-toggle--active]="isThreadExpanded(commentData.messageId)"
+                (click)="toggleCommentsThread(commentData.messageId)"
+                [attr.aria-label]="
+                  isThreadExpanded(commentData.messageId)
+                    ? 'Hide comments for message ' + commentData.messageId
+                    : 'View comments for message ' + commentData.messageId
+                "
+              >
+                <i
+                  class="bi"
+                  [class.bi-chat-left-dots-fill]="isThreadExpanded(commentData.messageId)"
+                  [class.bi-chat-left-dots]="!isThreadExpanded(commentData.messageId)"
+                ></i>
+              </button>
             </div>
           </footer>
+
+          @if (isThreadExpanded(commentData.messageId)) {
+            <section class="comment-thread" aria-label="Comments for this message">
+              <div class="comment-thread__header">
+                <div>
+                  <span class="comment-thread__eyebrow">Conversation</span>
+                  <h3>Replies on this message</h3>
+                </div>
+                <span class="comment-thread__count">
+                  {{ getMessageThread(commentData.messageId).length }}
+                </span>
+              </div>
+
+              <div class="comment-composer">
+                <label class="comment-composer__label" [for]="'comment-box-' + commentData.messageId">
+                  Add your comment
+                </label>
+                <textarea
+                  class="comment-composer__input"
+                  [id]="'comment-box-' + commentData.messageId"
+                  rows="3"
+                  placeholder="Share a thoughtful reply..."
+                  [value]="getCommentDraft(commentData.messageId)"
+                  [maxLength]="maxCommentLength"
+                  [disabled]="isSubmittingComment(commentData.messageId)"
+                  (input)="updateCommentDraft(commentData.messageId, $event)"
+                ></textarea>
+
+                <div class="comment-composer__footer">
+                  <span class="comment-composer__meta">
+                    {{ getCommentDraft(commentData.messageId).trim().length }}/{{ maxCommentLength }}
+                  </span>
+
+                  <button
+                    type="button"
+                    class="comment-composer__send"
+                    [disabled]="!canSubmitComment(commentData.messageId)"
+                    (click)="sendComment(commentData.messageId)"
+                  >
+                    @if (isSubmittingComment(commentData.messageId)) {
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span>Sending...</span>
+                    } @else {
+                      <i class="bi bi-send-fill"></i>
+                      <span>Send</span>
+                    }
+                  </button>
+                </div>
+
+                @if (getCommentSubmitError(commentData.messageId)) {
+                  <p class="comment-composer__error">
+                    {{ getCommentSubmitError(commentData.messageId) }}
+                  </p>
+                }
+              </div>
+
+              @if (isThreadLoading(commentData.messageId)) {
+                <div class="comment-thread__state comment-thread__state--loading">
+                  <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+                  <span>Loading comments...</span>
+                </div>
+              } @else if (hasThreadError(commentData.messageId)) {
+                <div class="comment-thread__state comment-thread__state--error">
+                  <i class="bi bi-exclamation-circle"></i>
+                  <span>Unable to load comments right now.</span>
+                </div>
+              } @else if (getMessageThread(commentData.messageId).length === 0) {
+                <div class="comment-thread__empty">
+                  <div class="comment-thread__empty-icon">
+                    <i class="bi bi-chat-heart"></i>
+                  </div>
+                  <p>No comments yet</p>
+                </div>
+              } @else {
+                <div class="comment-thread__list">
+                  @for (
+                    messageComment of getMessageThread(commentData.messageId);
+                    track messageComment.id
+                  ) {
+                    <article class="thread-comment-card">
+                      <div class="thread-comment-card__meta">
+                        <span class="thread-comment-card__author">
+                          {{ messageComment.authorName || 'Anonymous voice' }}
+                        </span>
+                        @if (messageComment.createdDate) {
+                          <span class="thread-comment-card__time">
+                            {{ formatCreatedDate(messageComment.createdDate) }}
+                          </span>
+                        }
+                      </div>
+                      <p>{{ messageComment.message }}</p>
+                    </article>
+                  }
+                </div>
+              }
+            </section>
+          }
         </article>
       }
     }

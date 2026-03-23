@@ -15,7 +15,7 @@ export class UserAuth {
   private baseUrl = environment.baseUrl;
   isAuthenticated = signal(false);
 
-  userId = signal<number | null>(null);
+  userId = signal<string | number | null>(null);
   username = signal<string | null>(null);
 
   login(data: any): Observable<any> {
