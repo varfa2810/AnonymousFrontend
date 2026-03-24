@@ -189,6 +189,11 @@
 }
 
 .reaction-pill {
+  --reaction-text: rgba(237, 242, 247, 0.76);
+  --reaction-bg: rgba(255, 255, 255, 0.05);
+  --reaction-bg-hover: rgba(255, 255, 255, 0.1);
+  --reaction-bg-active: rgba(255, 255, 255, 0.16);
+  --reaction-ring: rgba(255, 255, 255, 0.16);
   min-width: 4.2rem;
   min-height: 2.45rem;
   padding: 0.42rem 0.8rem;
@@ -197,6 +202,41 @@
   justify-content: center;
   gap: 0.5rem;
   font-weight: 700;
+  color: var(--reaction-text);
+  background: var(--reaction-bg);
+  box-shadow: inset 0 0 0 1px transparent;
+}
+
+.reaction-pill--like {
+  --reaction-text: #9ef0bf;
+  --reaction-bg: rgba(34, 197, 94, 0.12);
+  --reaction-bg-hover: rgba(34, 197, 94, 0.18);
+  --reaction-bg-active: rgba(34, 197, 94, 0.26);
+  --reaction-ring: rgba(74, 222, 128, 0.28);
+}
+
+.reaction-pill--dislike {
+  --reaction-text: #8ad9ff;
+  --reaction-bg: rgba(14, 165, 233, 0.12);
+  --reaction-bg-hover: rgba(14, 165, 233, 0.18);
+  --reaction-bg-active: rgba(14, 165, 233, 0.26);
+  --reaction-ring: rgba(56, 189, 248, 0.28);
+}
+
+.reaction-pill--love {
+  --reaction-text: #ff8fa3;
+  --reaction-bg: rgba(244, 63, 94, 0.12);
+  --reaction-bg-hover: rgba(244, 63, 94, 0.18);
+  --reaction-bg-active: rgba(244, 63, 94, 0.26);
+  --reaction-ring: rgba(251, 113, 133, 0.3);
+}
+
+.reaction-pill--party {
+  --reaction-text: #ffe082;
+  --reaction-bg: rgba(250, 204, 21, 0.14);
+  --reaction-bg-hover: rgba(250, 204, 21, 0.2);
+  --reaction-bg-active: rgba(250, 204, 21, 0.28);
+  --reaction-ring: rgba(250, 204, 21, 0.3);
 }
 
 .reaction-pill:hover,
@@ -204,13 +244,23 @@
 .comment-share-btn:hover,
 .comment-thread-toggle:hover {
   transform: translateY(-1px);
+}
+
+.reaction-pill:hover {
+  color: var(--reaction-text);
+  background: var(--reaction-bg-hover);
+}
+
+.comment-action-btn:hover,
+.comment-share-btn:hover,
+.comment-thread-toggle:hover {
   color: #ffffff;
 }
 
 .reaction-active {
-  color: #fff;
-  background: rgba(25, 135, 84, 0.3) !important;
-  box-shadow: 0 0 0 1px rgba(25, 135, 84, 0.22);
+  color: var(--reaction-text);
+  background: var(--reaction-bg-active) !important;
+  box-shadow: inset 0 0 0 1px var(--reaction-ring), 0 0 0 1px var(--reaction-ring);
 }
 
 .comment-action-btn {

@@ -72,7 +72,7 @@
             <div class="comment-reactions">
               <button
                 type="button"
-                class="reaction-pill"
+                class="reaction-pill reaction-pill--like"
                 [class.reaction-active]="commentData.isUserLiked"
                 [class.reaction-like-burst]="isReactionAnimating(commentData.messageId, 1)"
                 (click)="reactComments(commentData.messageId, 1)"
@@ -87,7 +87,7 @@
 
               <button
                 type="button"
-                class="reaction-pill"
+                class="reaction-pill reaction-pill--dislike"
                 [class.reaction-active]="commentData.isUserDisliked"
                 [class.reaction-dislike-burst]="isReactionAnimating(commentData.messageId, 2)"
                 (click)="reactComments(commentData.messageId, 2)"
@@ -102,7 +102,7 @@
 
               <button
                 type="button"
-                class="reaction-pill reaction-pill--heart"
+                class="reaction-pill reaction-pill--love"
                 [class.reaction-active]="commentData.isUserLoved"
                 [class.reaction-heart-burst]="isReactionAnimating(commentData.messageId, 3)"
                 (click)="reactComments(commentData.messageId, 3)"
@@ -117,7 +117,7 @@
 
               <button
                 type="button"
-                class="reaction-pill"
+                class="reaction-pill reaction-pill--party"
                 [class.reaction-active]="commentData.isUserParty"
                 [class.reaction-party-burst]="isReactionAnimating(commentData.messageId, 4)"
                 (click)="reactComments(commentData.messageId, 4)"
