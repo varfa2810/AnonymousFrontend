@@ -36,8 +36,8 @@
     </div>
   }
 
-  <main class="flex-fill" [class.app-main-immersive]="isImmersiveRoute()">
-    <div [class]="getRouteShellClass()">
+  <main class="app-main flex-fill">
+    <div class="app-route-shell">
       <router-outlet></router-outlet>
     </div>
   </main>

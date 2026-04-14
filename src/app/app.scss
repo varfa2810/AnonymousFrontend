@@ -5,23 +5,15 @@
   min-height: 100vh;
 }
 
-.app-main-immersive {
-  height: 100dvh;
-  min-height: 100dvh;
-  overflow: hidden;
+.app-main {
+  min-height: 0;
 }
 
-.app-route-shell--immersive {
-  height: 100dvh;
-  min-height: 100dvh;
-  overflow: hidden;
-}
-
-.app-route-shell--wide {
-  width: min(100%, 92rem);
-  margin: 0 auto;
-  padding: 1rem 1.25rem 1.5rem;
-  overflow-x: clip;
+.app-route-shell {
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding-inline: clamp(0.9rem, 2.5vw, 1.8rem);
 }
 
 .app-background-pattern {
@@ -68,19 +60,5 @@
 
   .app-background-pattern i {
     font-size: clamp(1.9rem, 7vw, 2.6rem);
-  }
-}
-
-@media (max-width: 991.98px) {
-  .app-main-immersive,
-  .app-route-shell--immersive {
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-  }
-
-  .app-route-shell--wide {
-    width: 100%;
-    padding: 0.9rem 0.9rem 1.25rem;
   }
 }

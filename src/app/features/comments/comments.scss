@@ -1,5 +1,5 @@
 .comments-page {
-  padding-top: 0.85rem;
+  padding: 0.85rem 1rem 1.25rem;
   color: #edf2f7;
 }
 
@@ -779,7 +779,7 @@
 
 @media (max-width: 767.98px) {
   .comments-page {
-    padding-top: 0.65rem;
+    padding: 0.65rem 0.85rem 1rem;
   }
 
   .comments-shell {
@@ -862,3 +862,4 @@
     padding-inline: 0.75rem;
   }
 }
+

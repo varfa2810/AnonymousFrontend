@@ -1,5 +1,5 @@
 .rules-page {
-  padding-top: 0.8rem;
+  padding: 0.8rem 1rem 1.25rem;
   color: #edf2f7;
 }
 
@@ -235,7 +235,7 @@
 
 @media (max-width: 575.98px) {
   .rules-page {
-    padding-top: 0.65rem;
+    padding: 0.65rem 0.85rem 1rem;
   }
 
   .rules-hero-card,
@@ -264,3 +264,4 @@
     flex-direction: column;
   }
 }
+
