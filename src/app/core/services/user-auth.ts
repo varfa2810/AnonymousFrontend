@@ -17,7 +17,8 @@ export class UserAuth {
 
   userId = signal<string | number | null>(null);
   username = signal<string | null>(null);
-
+  role = signal<string | null>(null);
+  
   login(data: any): Observable<any> {
     return this.httpclient
       .post<any>(`${this.baseUrl}/auth/login`, data)
@@ -30,6 +31,7 @@ export class UserAuth {
         this.isAuthenticated.set(false);
         this.userId.set(null);
         this.username.set(null);
+        this.role.set(null);
       }),
     );
   }
@@ -40,6 +42,7 @@ export class UserAuth {
         this.isAuthenticated.set(true);
         this.userId.set(res.userId);
         this.username.set(res.username);
+        this.role.set(res.role);
       }),
       catchError(() => {
         this.isAuthenticated.set(false);

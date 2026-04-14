@@ -8,6 +8,10 @@
   color: #edf2f7;
 }
 
+.app-footer__inner {
+  padding-inline: clamp(1.2rem, 2.8vw, 2rem);
+}
+
 .footer-shell {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 0.8fr);

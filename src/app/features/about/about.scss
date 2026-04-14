@@ -1,5 +1,5 @@
 .about-page {
-  padding-top: 0.85rem;
+  padding: 0.85rem 1rem 1.25rem;
   color: #edf2f7;
 }
 
@@ -366,7 +366,7 @@
 
 @media (max-width: 575.98px) {
   .about-page {
-    padding-top: 0.65rem;
+    padding: 0.65rem 0.85rem 1rem;
   }
 
   .about-shell {
@@ -396,3 +396,4 @@
     flex-direction: column;
   }
 }
+

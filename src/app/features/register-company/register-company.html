@@ -1,0 +1,266 @@
+<section class="company-page">
+  <div class="company-layout">
+    <div class="company-story">
+      <div class="company-story__inner">
+        <div class="company-story__hero">
+          <h1>
+            Register your
+            <span>company identity</span>
+          </h1>
+          <p>
+            Onboard your organization into Anonymous with a calm, secure workflow for company
+            contact details, location mapping, and requester verification.
+          </p>
+        </div>
+
+        <div class="company-story__features">
+          <article class="company-feature">
+            <div class="company-feature__icon">
+              <i class="bi bi-buildings"></i>
+            </div>
+            <div>
+              <h2>Structured onboarding</h2>
+              <p>Capture legal identity, workforce size, and operational contact details cleanly.</p>
+            </div>
+          </article>
+
+          <article class="company-feature">
+            <div class="company-feature__icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+              <h2>Validated before submit</h2>
+              <p>Inline checks help you send a complete company registration request the first time.</p>
+            </div>
+          </article>
+        </div>
+
+        <ul class="company-story__benefits">
+          <li><i class="bi bi-check-circle-fill"></i> Single-screen company registration</li>
+          <li><i class="bi bi-check-circle-fill"></i> Clear requester and company email separation</li>
+          <li><i class="bi bi-check-circle-fill"></i> Built to match the Anonymous onboarding flow</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-access">
+      <div class="company-card">
+        <div class="company-card__header">
+          <h2>Start company onboarding</h2>
+          <p>Provide your organization details to begin registration.</p>
+        </div>
+
+        <form [formGroup]="registerCompanyForm" (ngSubmit)="onSubmit()" novalidate>
+          @if (successMessage()) {
+            <div class="company-inline-note company-inline-note--success" role="status">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>{{ successMessage() }}</span>
+            </div>
+          }
+
+          @if (errorMessage()) {
+            <div class="company-inline-note company-inline-note--error" role="alert">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <span>{{ errorMessage() }}</span>
+            </div>
+          }
+
+          <div class="company-grid company-grid--two">
+            <div class="company-field">
+              <label for="companyName">Company Name</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('companyName', 'required') || hasError('companyName', 'minlength')">
+                <input
+                  id="companyName"
+                  type="text"
+                  formControlName="companyName"
+                  placeholder="Nexus Global Systems"
+                />
+              </div>
+              @if (hasError('companyName', 'required')) {
+                <small class="field-error">Please enter the company name.</small>
+              }
+              @if (hasError('companyName', 'minlength')) {
+                <small class="field-error">Company name must be at least 3 characters.</small>
+              }
+            </div>
+
+            <div class="company-field">
+              <label for="employeeStrength">Employee Strength</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('employeeStrength', 'required') || hasError('employeeStrength', 'min')">
+                <input
+                  id="employeeStrength"
+                  type="number"
+                  min="1"
+                  formControlName="employeeStrength"
+                  placeholder="120"
+                />
+              </div>
+              @if (hasError('employeeStrength', 'required')) {
+                <small class="field-error">Please enter the employee strength.</small>
+              }
+              @if (hasError('employeeStrength', 'min')) {
+                <small class="field-error">Employee strength must be at least 1.</small>
+              }
+            </div>
+          </div>
+
+          <div class="company-grid company-grid--two">
+            <div class="company-field">
+              <label for="email">Company Email</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')">
+                <input
+                  id="email"
+                  type="email"
+                  formControlName="email"
+                  placeholder="official@nexus.com"
+                />
+              </div>
+              @if (hasError('email', 'required')) {
+                <small class="field-error">Please enter the company email address.</small>
+              }
+              @if (hasError('email', 'email')) {
+                <small class="field-error">Please enter a valid company email address.</small>
+              }
+            </div>
+
+            <div class="company-field">
+              <label for="requesterEmail">Requester Email</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('requesterEmail', 'required') || hasError('requesterEmail', 'email')">
+                <input
+                  id="requesterEmail"
+                  type="email"
+                  formControlName="requesterEmail"
+                  placeholder="admin@nexus.com"
+                />
+              </div>
+              @if (hasError('requesterEmail', 'required')) {
+                <small class="field-error">Please enter the requester email address.</small>
+              }
+              @if (hasError('requesterEmail', 'email')) {
+                <small class="field-error">Please enter a valid requester email address.</small>
+              }
+            </div>
+          </div>
+
+          <div class="company-grid company-grid--two">
+            <div class="company-field">
+              <label for="phone">Phone</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('phone', 'required') || hasError('phone', 'pattern')">
+                <input
+                  id="phone"
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+              @if (hasError('phone', 'required')) {
+                <small class="field-error">Please enter the company phone number.</small>
+              }
+              @if (hasError('phone', 'pattern')) {
+                <small class="field-error">Please enter a valid phone number.</small>
+              }
+            </div>
+
+            <div class="company-field">
+              <label for="countryId">Country ID</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('countryId', 'required') || hasError('countryId', 'min')">
+                <input
+                  id="countryId"
+                  type="number"
+                  min="1"
+                  formControlName="countryId"
+                  placeholder="101"
+                />
+              </div>
+              @if (hasError('countryId', 'required')) {
+                <small class="field-error">Please enter the country ID.</small>
+              }
+              @if (hasError('countryId', 'min')) {
+                <small class="field-error">Country ID must be greater than 0.</small>
+              }
+            </div>
+          </div>
+
+          <div class="company-grid company-grid--two company-grid--three-small">
+            <div class="company-field">
+              <label for="stateId">State ID</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('stateId', 'required') || hasError('stateId', 'min')">
+                <input
+                  id="stateId"
+                  type="number"
+                  min="1"
+                  formControlName="stateId"
+                  placeholder="12"
+                />
+              </div>
+              @if (hasError('stateId', 'required')) {
+                <small class="field-error">Please enter the state ID.</small>
+              }
+              @if (hasError('stateId', 'min')) {
+                <small class="field-error">State ID must be greater than 0.</small>
+              }
+            </div>
+
+            <div class="company-field">
+              <label for="cityId">City ID</label>
+              <div class="company-input-wrap" [class.is-invalid]="hasError('cityId', 'required') || hasError('cityId', 'min')">
+                <input
+                  id="cityId"
+                  type="number"
+                  min="1"
+                  formControlName="cityId"
+                  placeholder="204"
+                />
+              </div>
+              @if (hasError('cityId', 'required')) {
+                <small class="field-error">Please enter the city ID.</small>
+              }
+              @if (hasError('cityId', 'min')) {
+                <small class="field-error">City ID must be greater than 0.</small>
+              }
+            </div>
+          </div>
+
+          <div class="company-field company-field--textarea">
+            <label for="companyAddress">Company Address</label>
+            <div class="company-input-wrap company-input-wrap--textarea" [class.is-invalid]="hasError('companyAddress', 'required') || hasError('companyAddress', 'minlength')">
+              <textarea
+                id="companyAddress"
+                formControlName="companyAddress"
+                rows="3"
+                placeholder="Enter the full company address"
+              ></textarea>
+            </div>
+            @if (hasError('companyAddress', 'required')) {
+              <small class="field-error">Please enter the company address.</small>
+            }
+            @if (hasError('companyAddress', 'minlength')) {
+              <small class="field-error">Company address must be at least 10 characters.</small>
+            }
+          </div>
+
+          <div class="company-disclaimer">
+            <p>
+              Submitted company registrations may be reviewed before activation. Please ensure your
+              IDs and contact details are correct.
+            </p>
+          </div>
+
+          <button type="submit" class="company-submit" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {
+              <span>Registering Company...</span>
+            } @else {
+              <span>Register Company</span>
+            }
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </form>
+
+        <div class="company-card__footer">
+          <span>Already have access?</span>
+          <a routerLink="/login">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
