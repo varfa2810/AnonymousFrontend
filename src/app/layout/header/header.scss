@@ -57,11 +57,21 @@
   align-items: center;
 }
 
+.navbar-collapse--super-admin {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .app-nav-list {
   display: flex;
   align-items: center;
   gap: clamp(0.8rem, 1.6vw, 2.15rem);
   margin: 0 auto;
+}
+
+.app-nav-list--super-admin {
+  margin-left: auto;
+  margin-right: 1.25rem;
 }
 
 .app-nav-link {

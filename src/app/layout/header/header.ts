@@ -18,6 +18,7 @@ export class Header {
 
   username = this.authService.username;
   userid = this.authService.userId;
+  isSuperAdmin = this.authService.isSuperAdmin;
   isNavbarOpen = false;
   isUserMenuOpen = false;
 

@@ -1,6 +1,10 @@
 <nav class="navbar navbar-expand-xl navbar-dark app-header">
   <div class="container-fluid app-header__inner">
-    <a class="navbar-brand app-brand" routerLink="/request" (click)="onNavClick()">
+    <a
+      class="navbar-brand app-brand"
+      [routerLink]="isSuperAdmin() ? '/super-admin/companies' : '/request'"
+      (click)="onNavClick()"
+    >
       <span class="brand-icon">
         <i class="bi bi-shield-lock-fill"></i>
       </span>
@@ -18,68 +22,111 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="mainNavbar" [class.show]="isNavbarOpen">
-      <ul class="navbar-nav app-nav-list">
-        <li class="nav-item">
-          <a
-            class="nav-link app-nav-link"
-            routerLink="/request"
-            routerLinkActive="active-link"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="onNavClick()"
-          >
-            <i class="bi bi-send app-nav-link__icon"></i>
-            Request
-          </a>
-        </li>
+    <div
+      class="collapse navbar-collapse"
+      id="mainNavbar"
+      [class.show]="isNavbarOpen"
+      [class.navbar-collapse--super-admin]="isSuperAdmin()"
+    >
+      <ul class="navbar-nav app-nav-list" [class.app-nav-list--super-admin]="isSuperAdmin()">
+        @if (!isSuperAdmin()) {
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/request"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-send app-nav-link__icon"></i>
+              Request
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link app-nav-link"
-            routerLink="/comments"
-            routerLinkActive="active-link"
-            (click)="onCommentsNavClick($event)"
-          >
-            <i class="bi bi-chat-dots app-nav-link__icon"></i>
-            All Comments
-          </a>
-        </li>
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/comments"
+              routerLinkActive="active-link"
+              (click)="onCommentsNavClick($event)"
+            >
+              <i class="bi bi-chat-dots app-nav-link__icon"></i>
+              All Comments
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link app-nav-link"
-            routerLink="/my-comments"
-            routerLinkActive="active-link"
-            (click)="onNavClick()"
-          >
-            <i class="bi bi-chat-left-text app-nav-link__icon"></i>
-            My Comments
-          </a>
-        </li>
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/my-comments"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-chat-left-text app-nav-link__icon"></i>
+              My Comments
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link app-nav-link"
-            routerLink="/rules"
-            routerLinkActive="active-link"
-            (click)="onNavClick()"
-          >
-            <i class="bi bi-shield-check app-nav-link__icon"></i>
-            Rules
-          </a>
-        </li>
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/rules"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-shield-check app-nav-link__icon"></i>
+              Rules
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link app-nav-link"
-            routerLink="/about"
-            routerLinkActive="active-link"
-            (click)="onNavClick()"
-          >
-            <i class="bi bi-info-circle app-nav-link__icon"></i>
-            About
-          </a>
-        </li>
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/about"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-info-circle app-nav-link__icon"></i>
+              About
+            </a>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/rules"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-shield-check app-nav-link__icon"></i>
+              Rules
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/about"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-info-circle app-nav-link__icon"></i>
+              About
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link app-nav-link"
+              routerLink="/settings"
+              routerLinkActive="active-link"
+              (click)="onNavClick()"
+            >
+              <i class="bi bi-gear"></i>
+              Settings
+            </a>
+          </li>
+        }
       </ul>
 
       <div class="app-user-menu" (click)="$event.stopPropagation()">

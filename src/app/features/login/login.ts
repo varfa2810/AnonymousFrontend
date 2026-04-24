@@ -39,7 +39,7 @@ export class Login {
         next: (session) => {
           if (session) {
             this.submitted = false;
-            this.router.navigate(['/request']);
+            this.router.navigate([this.userService.isSuperAdmin() ? '/super-admin/companies' : '/request']);
           }
         },
         error: (err) => {

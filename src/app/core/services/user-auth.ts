@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../enviornments/env.dev';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 
@@ -18,6 +18,7 @@ export class UserAuth {
   userId = signal<string | number | null>(null);
   username = signal<string | null>(null);
   role = signal<string | null>(null);
+  isSuperAdmin = computed(() => this.matchesSuperAdminRole(this.role()));
   
   login(data: any): Observable<any> {
     return this.httpclient
@@ -46,6 +47,9 @@ export class UserAuth {
       }),
       catchError(() => {
         this.isAuthenticated.set(false);
+        this.userId.set(null);
+        this.username.set(null);
+        this.role.set(null);
         return of(null);
       }),
     );
@@ -81,4 +85,12 @@ export class UserAuth {
       );
   }
 
+  private matchesSuperAdminRole(role: string | null): boolean {
+    if (!role) {
+      return false;
+    }
+
+    const normalizedRole = role.toLowerCase().replace(/[\s_-]/g, '');
+    return normalizedRole === 'superadmin';
+  }
 }
