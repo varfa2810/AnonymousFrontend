@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
 import { Request } from './features/request/request';
 import { authGuard } from './core/guards/auth-guard';
+import { superAdminGuard } from './core/guards/super-admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,12 +20,22 @@ export const routes: Routes = [
       ),
     title: 'Register Company',
   },
+  {
+    path: 'super-admin/companies',
+    loadComponent: () =>
+      import('./features/super-admin-companies/super-admin-companies').then(
+        (m) => m.SuperAdminCompanies,
+      ),
+    title: 'Super Admin',
+    canActivate: [superAdminGuard],
+  },
   { path: 'request', component: Request, title: 'Request', canActivate: [authGuard] },
   {
     path: 'rules',
     loadComponent: () => import('./features/rules/rules').then((m) => m.Rules),
     title: 'Rules',
     canActivate: [authGuard],
+    data: { allowSuperAdmin: true },
   },
   {
     path: 'comments',
@@ -43,12 +54,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),
     title: 'Settings',
     canActivate: [authGuard],
+    data: { allowSuperAdmin: true },
   },
   {
     path: 'about',
     loadComponent: () => import('./features/about/about').then((m) => m.About),
     title: 'About',
     canActivate: [authGuard],
+    data: { allowSuperAdmin: true },
   },
 
   {

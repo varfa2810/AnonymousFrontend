@@ -1,0 +1,179 @@
+<section class="super-admin-page">
+  <div class="super-admin-toolbar">
+    <div>
+      <span class="super-admin-badge">Super Admin Console</span>
+      <h1>Company Approval Desk</h1>
+    </div>
+
+    <div class="super-admin-toolbar__actions">
+      <button type="button" class="super-admin-refresh" (click)="loadCompanies()">
+        <i class="bi bi-arrow-clockwise"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="super-admin-search-shell">
+    <label class="super-admin-search" for="companySearch">
+      <i class="bi bi-search"></i>
+      <input
+        id="companySearch"
+        type="search"
+        placeholder="Search by company name"
+        [value]="searchTerm()"
+        (input)="updateSearchTerm($event)"
+      />
+      @if (searchTerm()) {
+        <button
+          type="button"
+          class="super-admin-search__clear"
+          (click)="clearSearch()"
+          aria-label="Clear search"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      }
+    </label>
+    <small>{{ filteredCompanies().length }} company{{ filteredCompanies().length === 1 ? '' : 'ies' }} shown</small>
+  </div>
+
+  @if (isLoading()) {
+    <div class="super-admin-content">
+      <div class="super-admin-state">
+        <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        <span>Loading Companies...</span>
+      </div>
+    </div>
+  } @else if (loadError()) {
+    <div class="super-admin-content">
+      <div class="super-admin-state super-admin-state--error">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>{{ loadError() }}</span>
+      </div>
+    </div>
+  } @else if (companies().length === 0) {
+    <div class="super-admin-content">
+      <div class="super-admin-state">
+        <i class="bi bi-building"></i>
+        <span>No company records.</span>
+      </div>
+    </div>
+  } @else {
+    <div class="super-admin-content">
+      @if (filteredCompanies().length === 0) {
+        <div class="super-admin-state">
+          <i class="bi bi-search"></i>
+          <span>No company matched "{{ searchTerm() }}".</span>
+        </div>
+      } @else {
+        <div class="super-admin-cards">
+          @for (company of filteredCompanies(); track trackByCompanyId($index, company)) {
+            <article class="super-admin-card">
+              <div class="super-admin-card__identity">
+                <button
+                  type="button"
+                  class="super-admin-company-id"
+                  (click)="copyCompanyId(company.id)"
+                  [attr.aria-label]="'Copy company id ' + company.id"
+                  title="Copy company ID"
+                >
+                  <span>Company ID</span>
+                  <strong>{{ company.id }}</strong>
+                  <i
+                    class="bi"
+                    [class.bi-check2]="copiedCompanyId() === company.id"
+                    [class.bi-copy]="copiedCompanyId() !== company.id"
+                  ></i>
+                </button>
+
+                <div>
+                  <div class="super-admin-card__title-row">
+                    <h2>{{ company.companyName }}</h2>
+                    <span
+                      class="super-admin-status-pill"
+                      [class.is-approved]="companyStatusClass(company) === 'approved'"
+                      [class.is-rejected]="companyStatusClass(company) === 'rejected'"
+                    >
+                      {{ approvalLabel(company) }}
+                    </span>
+                  </div>
+                  <p class="super-admin-card__created-date">
+                    Created Date: {{ formatDate(company.createdDate) }}
+                  </p>
+
+                  @if (companyStatusClass(company) === 'pending') {
+                    <div class="super-admin-card__actions">
+                      <button
+                        type="button"
+                        class="super-admin-approve"
+                        [disabled]="isApproving(company.id)"
+                        (click)="approveCompany(company.id, true)"
+                      >
+                        @if (isApproving(company.id)) {
+                          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        } @else {
+                          <i class="bi bi-check-circle-fill"></i>
+                        }
+                        <span>Approve</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="super-admin-reject"
+                        [disabled]="isRejecting(company.id)"
+                        (click)="rejectCompany(company.id)"
+                      >
+                        @if (isRejecting(company.id)) {
+                          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        } @else {
+                          <i class="bi bi-x-circle-fill"></i>
+                        }
+                        <span>Reject</span>
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="super-admin-card__meta">
+                <button
+                  type="button"
+                  class="super-admin-card__meta-item super-admin-card__meta-item--copy"
+                  [disabled]="!(company.email || company.requesterEmail)"
+                  (click)="copyEmail(company.email || company.requesterEmail)"
+                >
+                  <i class="bi bi-envelope"></i>
+                  <span class="super-admin-card__meta-copy-text">
+                    {{ company.email || company.requesterEmail || 'No email available' }}
+                  </span>
+                  <i
+                    class="bi"
+                    [class.bi-check2]="copiedEmail() === (company.email || company.requesterEmail)"
+                    [class.bi-copy]="copiedEmail() !== (company.email || company.requesterEmail)"
+                  ></i>
+                </button>
+                <span>
+                  <i class="bi bi-telephone"></i>
+                  {{ company.phone || 'No phone available' }}
+                </span>
+                <span>
+                  <i class="bi bi-people"></i>
+                  {{ company.employeeStrength ?? 'N/A' }} employees
+                </span>
+                <span>
+                  <i class="bi bi-geo-alt"></i>
+                  {{ company.cityName || 'City N/A' }}, {{ company.stateName || 'State N/A' }},
+                  {{ company.countryName || 'Country N/A' }}
+                </span>
+                <span class="super-admin-card__address">
+                  <i class="bi bi-buildings"></i>
+                  {{ company.companyAddress || 'Address not available yet.' }}
+                </span>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

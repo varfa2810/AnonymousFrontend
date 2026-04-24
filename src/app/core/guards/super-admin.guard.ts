@@ -1,17 +1,14 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { UserAuth } from '../services/user-auth';
 import { catchError, map, of } from 'rxjs';
+import { UserAuth } from '../services/user-auth';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const superAdminGuard: CanActivateFn = () => {
   const auth = inject(UserAuth);
   const router = inject(Router);
-  const allowSuperAdmin = route.data?.['allowSuperAdmin'] === true;
 
   if (auth.isAuthenticated()) {
-    return auth.isSuperAdmin() && !allowSuperAdmin
-      ? router.createUrlTree(['/super-admin/companies'])
-      : true;
+    return auth.isSuperAdmin() ? true : router.createUrlTree(['/request']);
   }
 
   return auth.checkSession().pipe(
@@ -20,9 +17,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         return router.createUrlTree(['/login']);
       }
 
-      return auth.isSuperAdmin() && !allowSuperAdmin
-        ? router.createUrlTree(['/super-admin/companies'])
-        : true;
+      return auth.isSuperAdmin() ? true : router.createUrlTree(['/request']);
     }),
     catchError(() => of(router.createUrlTree(['/login']))),
   );
