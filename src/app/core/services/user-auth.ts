@@ -17,13 +17,11 @@ export class UserAuth {
 
   userId = signal<string | number | null>(null);
   username = signal<string | null>(null);
-  role = signal<string | null>(null);
-  isSuperAdmin = computed(() => this.matchesSuperAdminRole(this.role()));
-  
+  roles = signal<string[]>([]);
+
   login(data: any): Observable<any> {
     return this.httpclient
-      .post<any>(`${this.baseUrl}/auth/login`, data)
-      .pipe(tap(() => this.isAuthenticated.set(true)));
+      .post<any>(`${this.baseUrl}/auth/login`, data);
   }
 
   logout(): Observable<any> {
@@ -32,28 +30,36 @@ export class UserAuth {
         this.isAuthenticated.set(false);
         this.userId.set(null);
         this.username.set(null);
-        this.role.set(null);
+        this.roles.set([]);
       }),
     );
   }
 
-  checkSession() {
-    return this.httpclient.get<any>(`${this.baseUrl}/auth/WhoAmI`, { withCredentials: true }).pipe(
+  checkSession(): Observable<any> {
+    return this.httpclient.get<any>(`${this.baseUrl}/auth/WhoAmI`).pipe(
       tap((res) => {
-        this.isAuthenticated.set(true);
+        this.isAuthenticated.set(!!res?.userId);
         this.userId.set(res.userId);
         this.username.set(res.username);
-        this.role.set(res.role);
+        this.roles.set(res.roles || []);
       }),
       catchError(() => {
         this.isAuthenticated.set(false);
         this.userId.set(null);
         this.username.set(null);
-        this.role.set(null);
+        this.roles.set([]);
         return of(null);
       }),
     );
   }
+
+  isSuperAdmin = computed(() =>
+    this.roles().includes('SuperAdmin')
+  );
+
+  isEmployee = computed(() =>
+    this.roles().includes('Employee')
+  );
 
   checkUniqueUsername(username: string): Observable<boolean> {
     return this.httpclient
@@ -85,12 +91,4 @@ export class UserAuth {
       );
   }
 
-  private matchesSuperAdminRole(role: string | null): boolean {
-    if (!role) {
-      return false;
-    }
-
-    const normalizedRole = role.toLowerCase().replace(/[\s_-]/g, '');
-    return normalizedRole === 'superadmin';
-  }
 }
