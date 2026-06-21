@@ -248,6 +248,15 @@
 }
 
 @media (max-width: 1199.98px) {
+  .navbar-collapse:not(.show) {
+    display: none !important;
+  }
+
+  .navbar-collapse.show,
+  .navbar-collapse--super-admin.show {
+    display: block !important;
+  }
+
   .app-header {
     padding-block: 0.7rem;
   }
@@ -261,8 +270,14 @@
   }
 
   .app-nav-list {
+    flex-direction: column;
     align-items: stretch;
     gap: 0.25rem;
+    margin: 0;
+    padding-bottom: 0.8rem;
+  }
+
+  .app-nav-list--super-admin {
     margin: 0;
     padding-bottom: 0.8rem;
   }
@@ -285,6 +300,7 @@
   .app-user-menu {
     margin-left: 0;
     padding-top: 0.35rem;
+    width: 100%;
   }
 
   .app-user-btn {
@@ -308,6 +324,7 @@
 @media (max-width: 767.98px) {
   .app-header__inner {
     gap: 1rem;
+    padding-inline: 1rem;
   }
 
   .app-brand {
@@ -341,7 +358,8 @@
   }
 
   .app-user-btn__copy {
-    max-width: 9rem;
+    max-width: none;
+    flex: 1;
   }
 
   .app-user-btn__name {
@@ -352,12 +370,20 @@
 }
 
 @media (max-width: 479.98px) {
+  .app-header {
+    padding-block: 0.65rem;
+  }
+
+  .navbar-collapse {
+    padding: 0.7rem;
+  }
+
   .brand-wordmark {
     font-size: 1.35rem;
   }
 
-  .app-user-btn__copy {
-    max-width: 8.2rem;
+  .app-nav-link {
+    padding: 0.8rem 0.85rem !important;
   }
 
   .app-user-btn__name {

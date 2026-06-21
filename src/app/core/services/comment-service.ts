@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../enviornments/env.dev';
+import { ApiResponse, CommentResponseDto, MessageDto, ReactToMessageDto } from '../interface/Interfaces';
 
 export interface CommentRequestDto {
   messageId: number;
@@ -16,19 +17,21 @@ export class CommentService {
   private httpclient = inject(HttpClient);
   private baseUrl = environment.baseUrl;
 
-  GetAllComments(): Observable<any> {
-    return this.httpclient.get<any>(`${this.baseUrl}/messages/getAllMessages`);
+  GetAllComments(): Observable<ApiResponse<MessageDto[]>> {
+    return this.httpclient.get<ApiResponse<MessageDto[]>>(
+      `${this.baseUrl}/messages/getAllMessages`
+    );
   }
 
-  ReactToComment(reactData: any): Observable<any> {
-    return this.httpclient.post<any>(`${this.baseUrl}/messages/react`, reactData);
+  ReactToComment(reactData: ReactToMessageDto): Observable<ApiResponse<boolean>> {
+    return this.httpclient.post<ApiResponse<boolean>>(`${this.baseUrl}/messages/react`, reactData);
   }
 
-  CommentOnMessage(commentData: CommentRequestDto): Observable<any> {
-    return this.httpclient.post<any>(`${this.baseUrl}/messages/commentOnMessage`, commentData);
+  CommentOnMessage(commentData: CommentRequestDto): Observable<ApiResponse<boolean>> {
+    return this.httpclient.post<ApiResponse<boolean>>(`${this.baseUrl}/messages/commentOnMessage`, commentData);
   }
 
-  GetCommentsByMessageId(messageid: number): Observable<any> {
-    return this.httpclient.get<any>(`${this.baseUrl}/messages/getComments/${messageid}`);
+  GetCommentsByMessageId(messageid: number): Observable<ApiResponse<CommentResponseDto[]>> {
+    return this.httpclient.get<ApiResponse<CommentResponseDto[]>>(`${this.baseUrl}/messages/getComments/${messageid}`);
   }
 }

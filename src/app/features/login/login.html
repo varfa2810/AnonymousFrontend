@@ -59,76 +59,60 @@
 
         <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate>
           @if (loginErrorMessage()) {
-            <div class="login-inline-error" role="alert">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <span>{{ loginErrorMessage() }}</span>
-            </div>
+          <div class="login-inline-error" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>{{ loginErrorMessage() }}</span>
+          </div>
           }
 
           <div class="login-field">
             <label for="username">Username</label>
             <div class="login-input-wrap" [class.is-invalid]="hasError('username', 'required')">
-              <input
-                type="text"
-                id="username"
-                formControlName="username"
-                placeholder="Enter your username"
-                autocomplete="username"
-                (input)="clearLoginError()"
-              />
+              <input type="text" id="username" formControlName="username" placeholder="Enter your username"
+                autocomplete="username" (input)="clearLoginError()" />
               <span class="login-input-icon">
                 <i class="bi bi-person-circle"></i>
               </span>
             </div>
             @if (hasError('username', 'required')) {
-              <small class="field-error">Username is required.</small>
+            <small class="field-error">Username is required.</small>
             }
           </div>
 
           <div class="login-field">
             <label for="password">Password</label>
             <div class="login-input-wrap" [class.is-invalid]="hasError('password', 'required')">
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                formControlName="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                (input)="clearLoginError()"
-              />
+              <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                placeholder="Enter your password" autocomplete="current-password" (input)="clearLoginError()" />
 
-              <button
-                type="button"
-                class="login-input-icon login-input-icon--button"
+              <button type="button" class="login-input-icon login-input-icon--button"
                 (click)="showPassword = !showPassword"
-                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-              >
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
                 <i [className]="showPassword ? 'bi-eye-slash' : 'bi-key'"></i>
               </button>
             </div>
             @if (hasError('password', 'required')) {
-              <small class="field-error">Password is required.</small>
+            <small class="field-error">Password is required.</small>
             }
           </div>
 
           <div class="login-actions-row">
-            <label class="login-check">
-              <input type="checkbox" />
-              <span>Keep Session Open</span>
-            </label>
 
             <a routerLink="/register" class="login-secondary-link">Need an account?</a>
           </div>
 
-          <button type="submit" class="login-submit">
-            <span>Decrypt and Access</span>
+          <button type="submit" class="login-submit" [disabled]="isLoggingIn()">
+            @if (isLoggingIn()) {
+            <span class="login-submit__content">
+              <span class="login-submit__spinner" aria-hidden="true"></span>
+              <span>Logging in...</span>
+            </span>
+            } @else {
+            <span class="login-submit__content">Login</span>
+            }
           </button>
         </form>
 
-        <div class="login-cta-row">
-          <a routerLink="/register" class="login-cta login-cta--ghost">Generate Identity</a>
-          <a routerLink="/register-company" class="login-cta">Register Company</a>
-        </div>
 
         <div class="login-card__footer">
           <span>Need business onboarding?</span>

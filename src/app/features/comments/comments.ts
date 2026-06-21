@@ -2,30 +2,14 @@ import { Component, HostListener, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommentService } from '../../core/services/comment-service';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
+import { CommentDto, MessageComment } from '../../core/interface/Interfaces';
 
-interface Comment {
-  messageId: number;
-  message: string;
-  createdDate: string;
-
-  likes: number;
-  dislikes: number;
-  loves: number;
-  party: number;
-
-  isUserLiked: boolean;
-  isUserDisliked: boolean;
-  isUserLoved: boolean;
-  isUserParty: boolean;
-}
-
-interface MessageComment {
-  id: number | string;
-  message: string;
-  createdDate: string;
-  authorName?: string;
-}
+type CommentThreadRecord = Record<string, unknown>;
+type ReactionCommentRecord = Omit<CommentDto, 'createdDate'> & {
+  createdDate: string | Date;
+  like?: number;
+};
 
 @Component({
   selector: 'app-comments',
@@ -36,8 +20,8 @@ interface MessageComment {
 })
 export class Comments {
   private commentService = inject(CommentService);
-  private authService = inject(UserAuth);
-  goldenLikeTarget = 20;
+  private authService = inject(Auth);
+  goldenLikeTarget = 1;
   bannerLikeThreshold = 15;
   readonly minCommentLength = 2;
   readonly maxCommentLength = 300;
@@ -53,7 +37,7 @@ export class Comments {
   submittingCommentMessageId = signal<number | null>(null);
   commentSubmitErrors = signal<Record<number, string>>({});
 
-  comments: Comment[] = [];
+  comments: CommentDto[] = [];
 
   ngOnInit() {
     this.loadComments();
@@ -65,22 +49,9 @@ export class Comments {
 
     this.commentService.GetAllComments().subscribe({
       next: (res) => {
-        const rawComments = res?.data ?? res?.Data ?? [];
-        const incoming = Array.isArray(rawComments) ? (rawComments as Partial<Comment>[]) : [];
+        const incoming = Array.isArray(res?.data) ? res.data : [];
 
-        this.comments = incoming
-          .filter((comment): comment is Partial<Comment> => !!comment)
-          .map((comment) => ({
-            ...(comment as Comment),
-            likes: Number((comment as any).like ?? comment.likes ?? 0),
-            dislikes: Number(comment.dislikes ?? 0),
-            loves: Number(comment.loves ?? 0),
-            party: Number(comment.party ?? 0),
-            isUserLiked: Boolean(comment.isUserLiked),
-            isUserDisliked: Boolean(comment.isUserDisliked),
-            isUserLoved: Boolean(comment.isUserLoved),
-            isUserParty: Boolean(comment.isUserParty),
-          }));
+        this.comments = incoming.map((comment) => this.normalizeComment(comment));
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -91,7 +62,7 @@ export class Comments {
     });
   }
 
-  getReactionCount(comment: Comment, reactionName: string): number {
+  getReactionCount(comment: CommentDto, reactionName: string): number {
     switch (reactionName.toLowerCase()) {
       case 'like':
         return Number(comment.likes ?? 0);
@@ -106,11 +77,11 @@ export class Comments {
     }
   }
 
-  isGoldenComment(comment: Comment): boolean {
+  isGoldenComment(comment: CommentDto): boolean {
     return this.getReactionCount(comment, 'Like') >= this.goldenLikeTarget;
   }
 
-  likesAwayFromGolden(comment: Comment): number {
+  likesAwayFromGolden(comment: CommentDto): number {
     const likes = this.getReactionCount(comment, 'Like');
 
     return Math.max(this.goldenLikeTarget - likes, 0);
@@ -242,7 +213,7 @@ export class Comments {
   }
 
   sendComment(messageId: number): void {
-    const userId = this.authService.userId();
+    const userId = this.authService.currentUser()?.userId;
     const draft = this.getCommentDraft(messageId).trim();
 
     if (!userId) {
@@ -288,26 +259,26 @@ export class Comments {
     });
   }
 
-  private applyReactionToggle(comment: Comment, reactionTypeId: number) {
+  private applyReactionToggle(comment: CommentDto, reactionTypeId: number) {
     switch (reactionTypeId) {
       case 1:
         comment.isUserLiked = !comment.isUserLiked;
-        comment.likes += comment.isUserLiked ? 1 : -1;
+        comment.likes = Math.max(0, comment.likes + (comment.isUserLiked ? 1 : -1));
         break;
 
       case 2:
         comment.isUserDisliked = !comment.isUserDisliked;
-        comment.dislikes += comment.isUserDisliked ? 1 : -1;
+        comment.dislikes = Math.max(0, comment.dislikes + (comment.isUserDisliked ? 1 : -1));
         break;
 
       case 3:
         comment.isUserLoved = !comment.isUserLoved;
-        comment.loves += comment.isUserLoved ? 1 : -1;
+        comment.loves = Math.max(0, comment.loves + (comment.isUserLoved ? 1 : -1));
         break;
 
       case 4:
         comment.isUserParty = !comment.isUserParty;
-        comment.party += comment.isUserParty ? 1 : -1;
+        comment.party = Math.max(0, comment.party + (comment.isUserParty ? 1 : -1));
         break;
     }
   }
@@ -344,11 +315,13 @@ export class Comments {
 
     this.commentService.GetCommentsByMessageId(messageId).subscribe({
       next: (res) => {
-        const rawComments = res?.data ?? res?.Data ?? res ?? [];
+        const rawComments = res?.data ?? res ?? [];
         const incoming = Array.isArray(rawComments) ? rawComments : [];
         const normalizedComments = incoming
-          .filter((comment): comment is Record<string, unknown> => !!comment && typeof comment === 'object')
-          .map((comment, index) => this.normalizeMessageComment(comment, index));
+          .filter((comment) => !!comment && typeof comment === 'object')
+          .map((comment, index) =>
+            this.normalizeMessageComment(comment as unknown as CommentThreadRecord, index)
+          );
 
         this.messageThreads.update((threads) => ({
           ...threads,
@@ -389,7 +362,7 @@ export class Comments {
     }));
   }
 
-  private normalizeMessageComment(comment: Record<string, unknown>, index: number): MessageComment {
+  private normalizeMessageComment(comment: CommentThreadRecord, index: number): MessageComment {
     return {
       id:
         this.asNumber(comment['commentId']) ??
@@ -422,5 +395,24 @@ export class Comments {
   private asNumber(value: unknown): number | null {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  private normalizeComment(comment: ReactionCommentRecord): CommentDto {
+    return {
+      messageId: Number(comment.messageId),
+      message: String(comment.message ?? ''),
+      createdDate:
+        comment.createdDate instanceof Date
+          ? comment.createdDate.toISOString()
+          : String(comment.createdDate ?? ''),
+      likes: Number(((comment as unknown as { like?: number }).like ?? comment.likes ?? 0)),
+      dislikes: Number(comment.dislikes ?? 0),
+      loves: Number(comment.loves ?? 0),
+      party: Number(comment.party ?? 0),
+      isUserLiked: Boolean(comment.isUserLiked),
+      isUserDisliked: Boolean(comment.isUserDisliked),
+      isUserLoved: Boolean(comment.isUserLoved),
+      isUserParty: Boolean(comment.isUserParty),
+    };
   }
 }

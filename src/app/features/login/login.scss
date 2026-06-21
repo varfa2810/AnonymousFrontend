@@ -315,7 +315,7 @@
 .login-actions-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   padding-top: 0.1rem;
 }
@@ -365,10 +365,39 @@
     filter 0.25s ease;
 }
 
+.login-submit__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.login-submit__spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(16, 49, 31, 0.25);
+  border-top-color: #10311f;
+  border-radius: 50%;
+  animation: login-submit-spin 0.75s linear infinite;
+}
+
 .login-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 34px rgba(115, 221, 161, 0.28);
   filter: brightness(1.02);
+}
+
+.login-submit:disabled {
+  cursor: not-allowed;
+  transform: none;
+  filter: saturate(0.9);
+  box-shadow: 0 10px 24px rgba(115, 221, 161, 0.16);
+}
+
+.login-submit:disabled:hover {
+  transform: none;
+  box-shadow: 0 10px 24px rgba(115, 221, 161, 0.16);
+  filter: saturate(0.9);
 }
 
 .login-cta-row {
@@ -425,6 +454,12 @@
   background: rgba(255, 140, 140, 0.08);
   color: #ffd1d1;
   font-size: 0.95rem;
+}
+
+@keyframes login-submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1199.98px) {
@@ -534,7 +569,7 @@
   }
 
   .login-actions-row {
-    align-items: flex-start;
+    align-items: center;
   }
 
   .login-submit,
