@@ -11,9 +11,9 @@ import { catchError, map, of, switchMap, timer } from 'rxjs';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
 
-const uniqueUsernameValidator = (userAuth: UserAuth, currentUsername: string | null): AsyncValidatorFn => {
+const uniqueUsernameValidator = (userAuth: Auth, currentUsername: string | null): AsyncValidatorFn => {
   return (control: AbstractControl) => {
     const username = control.value?.trim();
 
@@ -39,7 +39,7 @@ const uniqueUsernameValidator = (userAuth: UserAuth, currentUsername: string | n
 })
 export class Settings {
   private formBuilder = inject(FormBuilder);
-  private userAuth = inject(UserAuth);
+  private userAuth = inject(Auth);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
@@ -47,11 +47,12 @@ export class Settings {
   submitted = false;
   isDeletingAccount = false;
   settingsSearch = '';
+  isSuperAdmin = this.userAuth.isSuperAdmin();
 
   usernameForm = this.formBuilder.group({
-    newUsername: this.formBuilder.control(this.userAuth.username() ?? '', {
+    newUsername: this.formBuilder.control(this.userAuth.currentUser()?.username ?? '', {
       validators: [Validators.required, Validators.minLength(3)],
-      asyncValidators: [uniqueUsernameValidator(this.userAuth, this.userAuth.username())],
+      asyncValidators: [uniqueUsernameValidator(this.userAuth, this.userAuth.currentUser()?.username ?? '')],
       updateOn: 'blur',
     }),
   });
@@ -76,7 +77,7 @@ export class Settings {
       !control.errors &&
       !control.pending &&
       control.touched &&
-      username !== this.userAuth.username()
+      username !== this.userAuth.currentUser()?.username
     );
   }
 
@@ -128,7 +129,7 @@ export class Settings {
   }
 
   private deleteMyAccount() {
-    const userId = this.userAuth.userId();
+    const userId = this.userAuth.currentUser()?.userId;
 
     if (!userId) {
       this.messageService.add({
@@ -156,9 +157,7 @@ export class Settings {
           return;
         }
 
-        this.userAuth.isAuthenticated.set(false);
-        this.userAuth.userId.set(null);
-        this.userAuth.username.set(null);
+        this.userAuth.currentUser.set(null);
 
         this.messageService.add({
           severity: 'success',

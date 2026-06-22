@@ -10,7 +10,8 @@ import {
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { catchError, map, of, switchMap, timer } from 'rxjs';
-import { UserAuth } from '../../core/services/user-auth';
+import { ApiResponse } from '../../core/interface/Interfaces';
+import { Auth } from '../../core/services/auth';
 
 const passwordMatchValidator: ValidatorFn = (
   control: AbstractControl,
@@ -25,7 +26,7 @@ const passwordMatchValidator: ValidatorFn = (
   return password === confirmPassword ? null : { passwordMismatch: true };
 };
 
-const uniqueUsernameValidator = (userAuth: UserAuth): AsyncValidatorFn => {
+const uniqueUsernameValidator = (userAuth: Auth): AsyncValidatorFn => {
   return (control: AbstractControl) => {
     const username = control.value?.trim();
 
@@ -35,7 +36,7 @@ const uniqueUsernameValidator = (userAuth: UserAuth): AsyncValidatorFn => {
 
     return timer(300).pipe(
       switchMap(() => userAuth.checkUniqueUsername(username)),
-      map((isUnique) => (isUnique ? null : { usernameTaken: true })),
+      map((response: ApiResponse<boolean>) => (response.data ? null : { usernameTaken: true })),
       catchError(() => of(null)),
     );
   };
@@ -49,7 +50,7 @@ const uniqueUsernameValidator = (userAuth: UserAuth): AsyncValidatorFn => {
 })
 export class Register {
   private formBuilder = inject(FormBuilder);
-  private userAuth = inject(UserAuth);
+  private userAuth = inject(Auth);
 
   showPassword = false;
   showConfirmPassword = false;
@@ -57,14 +58,10 @@ export class Register {
 
   registerForm = this.formBuilder.group(
     {
-      username: this.formBuilder.control(
-        '',
-        {
-          validators: [Validators.required, Validators.minLength(3)],
-          asyncValidators: [uniqueUsernameValidator(this.userAuth)],
-          updateOn: 'blur',
-        },
-      ),
+      username: this.formBuilder.control('', {
+        validators: [Validators.required, Validators.minLength(3)],
+        asyncValidators: [uniqueUsernameValidator(this.userAuth)],
+      }),
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
     },
@@ -91,9 +88,10 @@ export class Register {
 
   onSubmit() {
     this.submitted = true;
+    this.registerForm.markAllAsTouched();
+    this.registerForm.get('username')?.updateValueAndValidity();
 
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+    if (this.registerForm.pending || this.registerForm.invalid) {
       return;
     }
   }

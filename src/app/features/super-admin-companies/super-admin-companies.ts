@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { CompanySummary } from '../../core/interface/Interfaces';
+import { CompanySummaryDto } from '../../core/interface/Interfaces';
 import { SuperAdminService } from '../../core/services/super-admin.service';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-super-admin-companies',
@@ -14,7 +14,7 @@ import { UserAuth } from '../../core/services/user-auth';
 })
 export class SuperAdminCompanies {
   private superAdminService = inject(SuperAdminService);
-  private authService = inject(UserAuth);
+  private authService = inject(Auth);
   private router = inject(Router);
 
   isLoading = signal(true);
@@ -24,7 +24,7 @@ export class SuperAdminCompanies {
   copiedEmail = signal<string | null>(null);
   approvingCompanyId = signal<string | number | null>(null);
   rejectingCompanyId = signal<string | number | null>(null);
-  companies = signal<CompanySummary[]>([]);
+  companies = signal<CompanySummaryDto[]>([]);
   filteredCompanies = computed(() => {
     const query = this.searchTerm().trim().toLowerCase();
     if (!query) {
@@ -66,7 +66,7 @@ export class SuperAdminCompanies {
   }
 
 
-  trackByCompanyId(_index: number, company: CompanySummary): number | string {
+  trackByCompanyId(_index: number, company: CompanySummaryDto): number | string {
     return company.id;
   }
 
@@ -134,7 +134,7 @@ export class SuperAdminCompanies {
     this.searchTerm.set('');
   }
 
-  approveCompany(companyId: string | number, action : boolean): void {
+  approveCompany(companyId: string | number, action: boolean): void {
     if (String(this.approvingCompanyId()) === String(companyId)) {
       return;
     }
@@ -143,8 +143,7 @@ export class SuperAdminCompanies {
 
     this.superAdminService.ApproveCompany(companyId, action).subscribe({
       next: (res) => {
-        const isSuccess = res?.status === 200 || res?.status === 201 || res?.data === true;
-        if (isSuccess) {
+        if (res?.status === 200 || res?.status === 201) {
           this.updateCompanyStatus(companyId, 'Approved', true);
         }
         this.approvingCompanyId.set(null);
@@ -168,7 +167,7 @@ export class SuperAdminCompanies {
     });
   }
 
-  approvalLabel(company: CompanySummary | null): string {
+  approvalLabel(company: CompanySummaryDto | null): string {
     if (!company) {
       return 'Pending';
     }
@@ -180,7 +179,7 @@ export class SuperAdminCompanies {
     return company.isApproved ? 'Approved' : 'Pending';
   }
 
-  companyStatusClass(company: CompanySummary | null): 'approved' | 'rejected' | 'pending' {
+  companyStatusClass(company: CompanySummaryDto | null): 'approved' | 'rejected' | 'pending' {
     const label = this.approvalLabel(company).toLowerCase();
 
     if (label === 'approved') {
@@ -202,7 +201,7 @@ export class SuperAdminCompanies {
     return String(this.rejectingCompanyId()) === String(companyId);
   }
 
-  private normalizeCompanyList(payload: unknown): CompanySummary[] {
+  private normalizeCompanyList(payload: unknown): CompanySummaryDto[] {
     const rawItems: unknown[] = Array.isArray(payload)
       ? payload
       : Array.isArray((payload as any)?.data)
@@ -218,7 +217,7 @@ export class SuperAdminCompanies {
       );
   }
 
-  private normalizeCompany(payload: unknown, fallbackId: number | string): CompanySummary {
+  private normalizeCompany(payload: unknown, fallbackId: number | string): CompanySummaryDto {
     const company = (payload ?? {}) as Record<string, unknown>;
 
     return {

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
 import { SendMessageService } from '../../core/services/send-message-service';
 
 @Component({
@@ -15,7 +15,7 @@ export class Request {
   requestText: string = '';
   minLength = 10;
   maxLength = 500;
-  private authService = inject(UserAuth);
+  private authService = inject(Auth);
   private sendMessageService = inject(SendMessageService);
   private router = inject(Router);
 
@@ -27,9 +27,8 @@ export class Request {
 
     const formData = {
       message: trimmedMessage,
-      userId: this.authService.userId(),
+      userId: this.authService.currentUser()?.userId,
     };
-    console.log(formData);
 
     this.sendMessageService.SendMessage(formData).subscribe({
       next: (res) => {

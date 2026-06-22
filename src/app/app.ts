@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { environment } from '../enviornments/env.dev';
 import { Header } from './layout/header/header';
 import { Footer } from './layout/footer/footer';
-import { UserAuth } from './core/services/user-auth';
+import { Auth } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,6 @@ import { UserAuth } from './core/services/user-auth';
 })
 export class App {
   protected readonly env = signal(environment.envName);
-
-  private authService = inject(UserAuth);
-  isAuthenticated = this.authService.isAuthenticated;
+  private authService = inject(Auth);
+  protected readonly isAuthenticated = this.authService.isAuthenticated;
 }

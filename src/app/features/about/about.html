@@ -120,10 +120,11 @@
       </p>
 
       <div class="about-cta__actions">
-        <a routerLink="/request" class="about-primary-btn">
+
+        <a [routerLink]="isSuperAdmin ? ['/super-admin/companies'] : ['/request']" class="about-primary-btn">
           <span>Go to Request</span>
           <i class="bi bi-arrow-right"></i>
-        </a>
+        </a>  
         <a routerLink="/rules" class="about-secondary-btn">
           <span>Read Rules</span>
           <i class="bi bi-shield-check"></i>

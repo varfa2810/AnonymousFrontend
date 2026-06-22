@@ -1,4 +1,4 @@
-export interface LoginResponse {
+export interface LoginResponseDto {
   token: string;
   userId: string;
 }
@@ -21,7 +21,7 @@ export interface RegisterCompanyDto {
   requesterEmail: string;
 }
 
-export interface CompanySummary {
+export interface CompanySummaryDto {
   id: number | string;
   companyName: string;
   email?: string;
@@ -37,3 +37,52 @@ export interface CompanySummary {
   createdDate?: string;
 }
 
+export interface CommentDto {
+  messageId: number;
+  message: string;
+  createdDate: string;
+
+  likes: number;
+  dislikes: number;
+  loves: number;
+  party: number;
+
+  isUserLiked: boolean;
+  isUserDisliked: boolean;
+  isUserLoved: boolean;
+  isUserParty: boolean;
+}
+
+export interface MessageComment {
+  id: number | string;
+  message: string;
+  createdDate: string;
+  authorName?: string;
+}
+
+export interface MessageDto {
+  messageId: number;
+  message: string;
+  createdDate: Date;
+
+  likes: number;
+  dislikes: number;
+  loves: number;
+  party: number;
+
+  isUserLiked: boolean;
+  isUserDisliked: boolean;
+  isUserLoved: boolean;
+  isUserParty: boolean;
+}
+
+export interface ReactToMessageDto {
+  messageId: number;
+  reactionTypeId: number;
+}
+
+export interface CommentResponseDto {
+  messageId: number;
+  commentId: number;
+  comment: string;
+}

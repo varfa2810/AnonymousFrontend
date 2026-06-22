@@ -1,6 +1,6 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
@@ -12,13 +12,13 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
   providers: [ConfirmationService],
 })
 export class Header {
-  private authService = inject(UserAuth);
+  private authService = inject(Auth);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
 
-  username = this.authService.username;
-  userid = this.authService.userId;
-  isSuperAdmin = this.authService.isSuperAdmin;
+  username = this.authService.currentUser()?.username;
+  userid = this.authService.currentUser()?.userId;
+  isSuperAdmin = this.authService.isSuperAdmin();
   isNavbarOpen = false;
   isUserMenuOpen = false;
 

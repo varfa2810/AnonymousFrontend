@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-about',
@@ -8,4 +9,9 @@ import { RouterModule } from '@angular/router';
   styleUrl: './about.scss',
   standalone: true,
 })
-export class About {}
+export class About {
+
+  private authService = inject(Auth);
+
+  isSuperAdmin = this.authService.isSuperAdmin();
+}

@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { UserAuth } from '../../core/services/user-auth';
+import { Auth } from '../../core/services/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { EMPTY, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +11,14 @@ import { EMPTY, switchMap } from 'rxjs';
   styleUrl: './login.scss',
 })
 export class Login {
-  private userService = inject(UserAuth);
+  private userService = inject(Auth);
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
 
   showPassword = false;
   submitted = false;
   loginErrorMessage = signal('');
+  isLoggingIn = signal(false);
 
   loginForm = this.formBuilder.group({
     username: ['', Validators.required],
@@ -25,6 +26,10 @@ export class Login {
   });
 
   onLogin() {
+    if (this.isLoggingIn()) {
+      return;
+    }
+
     this.submitted = true;
 
     if (this.loginForm.invalid) {
@@ -32,14 +37,21 @@ export class Login {
       return;
     }
 
+    this.isLoggingIn.set(true);
+
     this.userService
       .login(this.loginForm.getRawValue())
-      .pipe(switchMap((res) => (res.status == 200 ? this.userService.checkSession() : EMPTY)))
+      .pipe(finalize(() => this.isLoggingIn.set(false)))
       .subscribe({
         next: (session) => {
           if (session) {
             this.submitted = false;
-            this.router.navigate([this.userService.isSuperAdmin() ? '/super-admin/companies' : '/request']);
+            if (this.userService.isSuperAdmin()) {
+              this.router.navigate(['/super-admin/companies']);
+              return;
+            }
+
+            this.router.navigate(['/request']);
           }
         },
         error: (err) => {
@@ -51,9 +63,10 @@ export class Login {
               password: '',
             });
             this.submitted = false;
-          } else {
-            this.loginErrorMessage.set('Unable to login right now. Please try again.');
+            return;
           }
+
+          this.loginErrorMessage.set('Unable to login right now. Please try again.');
         },
       });
   }
