@@ -31,7 +31,7 @@ export const routes: Routes = [
         (c) => c.SuperAdminCompanies,
       ),
     title: 'Super Admin',
-    canActivate: [superAdminGuard, authGuard],
+    canActivate: [authGuard, superAdminGuard],
   },
 
   { path: 'request', component: Request, title: 'Request', canActivate: [authGuard] },
@@ -78,5 +78,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/page-not-found/page-not-found').then((c) => c.PageNotFound),
     title: '404 Not Found',
+    canActivate: [authGuard],
   },
 ];
