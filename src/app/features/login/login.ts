@@ -66,7 +66,7 @@ export class Login {
             return;
           }
 
-          this.loginErrorMessage.set('Unable to login right now. Please try again.');
+          this.loginErrorMessage.set('Unable to login right now. Please try again after some time.');
         },
       });
   }

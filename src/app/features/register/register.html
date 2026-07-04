@@ -1,191 +1,125 @@
 <section class="register-page">
-  <div class="register-layout">
-    <div class="register-story">
-      <div class="register-story__inner">
-        <div class="register-story__hero">
-          <h1 class="register-story__title">
-            <span class="register-story__title-line">Create your calm,</span>
-            <span>private identity</span>
-          </h1>
-
-          <p class="register-story__lede">
-            Join Anonymous with the same quiet, privacy-first experience as login. Your access
-            starts with a lightweight identity and clear validation at every step.
-          </p>
-        </div>
-
-        <div class="register-story__points">
-          <article class="register-point">
-            <div class="register-point__icon">
-              <i class="bi bi-person-check"></i>
-            </div>
-            <div>
-              <h2>Simple setup</h2>
-              <p>Create your account with just a username and secure password.</p>
-            </div>
-          </article>
-
-          <article class="register-point">
-            <div class="register-point__icon">
-              <i class="bi bi-shield-lock"></i>
-            </div>
-            <div>
-              <h2>Private by design</h2>
-              <p>Validation stays clear and focused without cluttering the experience.</p>
-            </div>
-          </article>
-        </div>
-
-        <ul class="register-story__benefits">
-          <li><i class="bi bi-check-circle-fill"></i> Claim a unique username with instant feedback</li>
-          <li><i class="bi bi-check-circle-fill"></i> Set a secure password with clear guidance</li>
-          <li><i class="bi bi-check-circle-fill"></i> Enter the platform with the same polished flow as login</li>
-        </ul>
-      </div>
+  <div class="register-card">
+    <div class="register-card__header">
+      <h2>Create Account</h2>
+      <p>Choose your credentials to continue.</p>
     </div>
 
-    <div class="register-access">
-      <div class="register-access__ambient"></div>
-
-      <div class="register-card">
-        <div class="register-card__badge">
-          <i class="bi bi-person-plus"></i>
+    <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="register-field">
+        <label for="username">Username</label>
+        <div
+          class="register-input-wrap"
+          [class.is-invalid]="
+            hasError('username', 'required') ||
+            hasError('username', 'minlength') ||
+            hasError('username', 'usernameTaken')
+          "
+        >
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="Choose a username"
+            autocomplete="username"
+          />
+          <span class="register-input-icon">
+            <i class="bi bi-person-circle"></i>
+          </span>
         </div>
 
-        <div class="register-card__header">
-          <h2>Create Account</h2>
-          <p>Choose your credentials to open your anonymous space.</p>
-        </div>
+        @if (hasError('username', 'required')) {
+        <small class="field-error">Username is required.</small>
+        }
+        @if (hasError('username', 'minlength')) {
+        <small class="field-error">Username must be at least 3 characters.</small>
+        }
+        @if (hasError('username', 'usernameTaken')) {
+        <small class="field-error">This username is already taken.</small>
+        }
+        @if (isCheckingUsername) {
+        <small class="register-note">Checking username availability...</small>
+        }
+      </div>
 
-        <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
-          <div class="register-field">
-            <label for="username">Username</label>
-            <div
-              class="register-input-wrap"
-              [class.is-invalid]="
-                hasError('username', 'required') ||
-                hasError('username', 'minlength') ||
-                hasError('username', 'usernameTaken')
-              "
-            >
-              <input
-                type="text"
-                id="username"
-                formControlName="username"
-                placeholder="Choose a username"
-                autocomplete="username"
-              />
-              <span class="register-input-icon">
-                <i class="bi bi-person-circle"></i>
-              </span>
-            </div>
+      <div class="register-field">
+        <label for="password">Password</label>
+        <div
+          class="register-input-wrap"
+          [class.is-invalid]="hasError('password', 'required') || hasError('password', 'minlength')"
+        >
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Create your password"
+            autocomplete="new-password"
+          />
 
-            @if (hasError('username', 'required')) {
-            <small class="field-error">Username is required.</small>
-            }
-            @if (hasError('username', 'minlength')) {
-            <small class="field-error">Username must be at least 3 characters.</small>
-            }
-            @if (hasError('username', 'usernameTaken')) {
-            <small class="field-error">This username is already taken.</small>
-            }
-            @if (isCheckingUsername) {
-            <small class="register-note">Checking username availability...</small>
-            }
-          </div>
-
-          <div class="register-field">
-            <label for="password">Password</label>
-            <div
-              class="register-input-wrap"
-              [class.is-invalid]="hasError('password', 'required') || hasError('password', 'minlength')"
-            >
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                formControlName="password"
-                placeholder="Create your password"
-                autocomplete="new-password"
-              />
-
-              <button
-                type="button"
-                class="register-input-icon register-input-icon--button"
-                (click)="showPassword = !showPassword"
-                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-              >
-                <i [className]="showPassword ? 'bi-eye-slash' : 'bi-key'"></i>
-              </button>
-            </div>
-
-            @if (hasError('password', 'required')) {
-            <small class="field-error">Password is required.</small>
-            }
-            @if (hasError('password', 'minlength')) {
-            <small class="field-error">Password must be at least 6 characters.</small>
-            }
-          </div>
-
-          <div class="register-field">
-            <label for="confirmPassword">Confirm Password</label>
-            <div
-              class="register-input-wrap"
-              [class.is-invalid]="hasError('confirmPassword', 'required') || passwordsDoNotMatch"
-            >
-              <input
-                [type]="showConfirmPassword ? 'text' : 'password'"
-                id="confirmPassword"
-                formControlName="confirmPassword"
-                placeholder="Confirm your password"
-                autocomplete="new-password"
-              />
-
-              <button
-                type="button"
-                class="register-input-icon register-input-icon--button"
-                (click)="showConfirmPassword = !showConfirmPassword"
-                [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
-              >
-                <i [className]="showConfirmPassword ? 'bi-eye-slash' : 'bi-key'"></i>
-              </button>
-            </div>
-
-            @if (hasError('confirmPassword', 'required')) {
-            <small class="field-error">Please confirm your password.</small>
-            }
-            @if (passwordsDoNotMatch) {
-            <small class="field-error">Passwords do not match.</small>
-            }
-          </div>
-
-          <div class="register-disclaimer">
-            <p>
-              By creating an account, you confirm that your credentials should stay private and
-              secure.
-            </p>
-          </div>
-
-          <div class="register-actions-row">
-            <a routerLink="/login" class="register-secondary-link">Already have an account?</a>
-          </div>
-
-          <button type="submit" class="register-submit" [disabled]="registerForm.pending">
-            <span class="register-submit__content">
-              @if (registerForm.pending) {
-              <span class="register-submit__spinner" aria-hidden="true"></span>
-              <span>Validating...</span>
-              } @else {
-              <span>Create Account</span>
-              }
-            </span>
+          <button
+            type="button"
+            class="register-input-icon register-input-icon--button"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <i [className]="showPassword ? 'bi-eye-slash' : 'bi-key'"></i>
           </button>
-        </form>
-
-        <div class="register-card__footer">
-          <span>Need business onboarding?</span>
-          <a routerLink="/register-company">Open company registration</a>
         </div>
+
+        @if (hasError('password', 'required')) {
+        <small class="field-error">Password is required.</small>
+        }
+        @if (hasError('password', 'minlength')) {
+        <small class="field-error">Password must be at least 6 characters.</small>
+        }
       </div>
-    </div>
+
+      <div class="register-field">
+        <label for="confirmPassword">Confirm Password</label>
+        <div
+          class="register-input-wrap"
+          [class.is-invalid]="hasError('confirmPassword', 'required') || passwordsDoNotMatch"
+        >
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirm your password"
+            autocomplete="new-password"
+          />
+
+          <button
+            type="button"
+            class="register-input-icon register-input-icon--button"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+          >
+            <i [className]="showConfirmPassword ? 'bi-eye-slash' : 'bi-key'"></i>
+          </button>
+        </div>
+
+        @if (hasError('confirmPassword', 'required')) {
+        <small class="field-error">Please confirm your password.</small>
+        }
+        @if (passwordsDoNotMatch) {
+        <small class="field-error">Passwords do not match.</small>
+        }
+      </div>
+
+      <div class="register-actions-row">
+        <a routerLink="/login" class="register-secondary-link">Already have an account?</a>
+      </div>
+
+      <button type="submit" class="register-submit" [disabled]="registerForm.pending">
+        <span class="register-submit__content">
+          @if (registerForm.pending) {
+          <span class="register-submit__spinner" aria-hidden="true"></span>
+          <span>Validating...</span>
+          } @else {
+          <span>Create Account</span>
+          }
+        </span>
+      </button>
+    </form>
   </div>
 </section>

@@ -1,124 +1,78 @@
 <section class="login-page">
-  <div class="login-layout">
-    <div class="login-story">
-      <div class="login-story__inner">
-        <div class="login-story__hero">
-          <h1 class="login-story__title">
-            <span class="login-story__title-line">Enter your calm,</span>
-            <span>private space</span>
-          </h1>
-
-          <p class="login-story__lede">
-            Return to your private digital sanctuary. Anonymous keeps the focus on thoughtful
-            requests, secure access, and quieter community interaction.
-          </p>
-        </div>
-
-        <div class="login-story__points">
-          <article class="login-point">
-            <div class="login-point__icon">
-              <i class="bi bi-fingerprint"></i>
-            </div>
-            <div>
-              <h2>Simple identity</h2>
-              <p>Fast access with the same lightweight username you already trust.</p>
-            </div>
-          </article>
-
-          <article class="login-point">
-            <div class="login-point__icon">
-              <i class="bi bi-shield-lock"></i>
-            </div>
-            <div>
-              <h2>Private by design</h2>
-              <p>Your presence stays secure and your access remains intentionally minimal.</p>
-            </div>
-          </article>
-        </div>
-
-        <ul class="login-story__benefits">
-          <li><i class="bi bi-check-circle-fill"></i> Re-enter your anonymous space instantly</li>
-          <li><i class="bi bi-check-circle-fill"></i> Continue requests and replies with confidence</li>
-          <li><i class="bi bi-check-circle-fill"></i> Stay focused on ideas instead of profiles</li>
-        </ul>
-      </div>
+  <div class="login-card">
+    <div class="login-card__header">
+      <h2>Welcome Back</h2>
+      <p>Provide your credentials to continue.</p>
     </div>
 
-    <div class="login-access">
-      <div class="login-access__ambient"></div>
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate>
+      @if (loginErrorMessage()) {
+      <div class="login-inline-error" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>{{ loginErrorMessage() }}</span>
+      </div>
+      }
 
-      <div class="login-card">
-        <div class="login-card__badge">
-          <i class="bi bi-fingerprint"></i>
+      <div class="login-field">
+        <label for="username">Username</label>
+        <div class="login-input-wrap" [class.is-invalid]="hasError('username', 'required')">
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="Enter your username"
+            autocomplete="username"
+            (input)="clearLoginError()"
+          />  
+          <span class="login-input-icon">
+            <i class="bi bi-person-circle"></i>
+          </span>
         </div>
+        @if (hasError('username', 'required')) {
+        <small class="field-error">Username is required.</small>
+        }
+      </div>
 
-        <div class="login-card__header">
-          <h2>Welcome Back</h2>
-          <p>Provide your credentials to enter your anonymous space.</p>
-        </div>
+      <div class="login-field">
+        <label for="password">Password</label>
+        <div class="login-input-wrap" [class.is-invalid]="hasError('password', 'required')">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            (input)="clearLoginError()"
+          />
 
-        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate>
-          @if (loginErrorMessage()) {
-          <div class="login-inline-error" role="alert">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            <span>{{ loginErrorMessage() }}</span>
-          </div>
-          }
-
-          <div class="login-field">
-            <label for="username">Username</label>
-            <div class="login-input-wrap" [class.is-invalid]="hasError('username', 'required')">
-              <input type="text" id="username" formControlName="username" placeholder="Enter your username"
-                autocomplete="username" (input)="clearLoginError()" />
-              <span class="login-input-icon">
-                <i class="bi bi-person-circle"></i>
-              </span>
-            </div>
-            @if (hasError('username', 'required')) {
-            <small class="field-error">Username is required.</small>
-            }
-          </div>
-
-          <div class="login-field">
-            <label for="password">Password</label>
-            <div class="login-input-wrap" [class.is-invalid]="hasError('password', 'required')">
-              <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
-                placeholder="Enter your password" autocomplete="current-password" (input)="clearLoginError()" />
-
-              <button type="button" class="login-input-icon login-input-icon--button"
-                (click)="showPassword = !showPassword"
-                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-                <i [className]="showPassword ? 'bi-eye-slash' : 'bi-key'"></i>
-              </button>
-            </div>
-            @if (hasError('password', 'required')) {
-            <small class="field-error">Password is required.</small>
-            }
-          </div>
-
-          <div class="login-actions-row">
-
-            <a routerLink="/register" class="login-secondary-link">Need an account?</a>
-          </div>
-
-          <button type="submit" class="login-submit" [disabled]="isLoggingIn()">
-            @if (isLoggingIn()) {
-            <span class="login-submit__content">
-              <span class="login-submit__spinner" aria-hidden="true"></span>
-              <span>Logging in...</span>
-            </span>
-            } @else {
-            <span class="login-submit__content">Login</span>
-            }
+          <button
+            type="button"
+            class="login-input-icon login-input-icon--button"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <i [className]="showPassword ? 'bi-eye-slash' : 'bi-key'"></i>
           </button>
-        </form>
-
-
-        <div class="login-card__footer">
-          <span>Need business onboarding?</span>
-          <a routerLink="/register-company">Open company registration</a>
         </div>
+        @if (hasError('password', 'required')) {
+        <small class="field-error">Password is required.</small>
+        }
       </div>
-    </div>
+
+      <div class="login-actions-row">
+        <a routerLink="/register" class="login-secondary-link">Need an account?</a>
+      </div>
+
+      <button type="submit" class="login-submit" [disabled]="isLoggingIn()">
+        @if (isLoggingIn()) {
+        <span class="login-submit__content">
+          <span class="login-submit__spinner" aria-hidden="true"></span>
+          <span>Logging in...</span>
+        </span>
+        } @else {
+        <span class="login-submit__content">Login</span>
+        }
+      </button>
+    </form>
   </div>
 </section>
