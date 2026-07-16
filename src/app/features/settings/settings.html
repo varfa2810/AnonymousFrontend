@@ -18,63 +18,6 @@
         </div>
       </div>
 
-      @if (shouldShowCard('reset username')) {
-      <article class="settings-card">
-        <div class="settings-card__head">
-          <span class="settings-card__icon">
-            <i class="bi bi-bag-check"></i>
-          </span>
-          <div>
-            <h2>Reset Username</h2>
-            <p>Update your public identity within the community.</p>
-          </div>
-        </div>
-
-        <form [formGroup]="usernameForm" (ngSubmit)="onSubmit()" novalidate>
-          <label for="settingsUsername" class="settings-label">Username</label>
-          <div class="settings-input-wrap">
-            <input id="settingsUsername" type="text" formControlName="newUsername" placeholder="Enter a new username"
-              [class.is-invalid]="
-                hasError('newUsername', 'required') ||
-                hasError('newUsername', 'minlength') ||
-                hasError('newUsername', 'usernameTaken')
-              " />
-          </div>
-
-          @if (hasError('newUsername', 'required')) {
-          <small class="field-error">Username is required.</small>
-          }
-          @if (hasError('newUsername', 'minlength')) {
-          <small class="field-error">Username must be at least 3 characters.</small>
-          }
-          @if (hasError('newUsername', 'usernameTaken')) {
-          <small class="field-error">This username is already taken.</small>
-          }
-          @if (isCheckingUsername) {
-          <small class="settings-helper-text">Checking username availability...</small>
-          }
-          @if (isUsernameAvailable) {
-          <small class="field-success">This username is available.</small>
-          }
-          @if (
-          !hasError('newUsername', 'required') &&
-          !hasError('newUsername', 'minlength') &&
-          !hasError('newUsername', 'usernameTaken') &&
-          !isCheckingUsername &&
-          !isUsernameAvailable
-          ) {
-          <p class="settings-helper-copy">
-            Choose a username you can remember easily and feel comfortable using publicly.
-          </p>
-          }
-
-          <button type="submit" class="settings-primary-btn" [disabled]="usernameForm.invalid || isCheckingUsername">
-            Update Username
-          </button>
-        </form>
-      </article>
-      }
-
       @if (!isSuperAdmin) {
       @if (shouldShowCard('delete account')) {
       <article class="settings-card settings-card--danger">
@@ -105,7 +48,7 @@
       }
 
 
-      @if (!shouldShowCard('reset username') && !shouldShowCard('delete account')) {
+      @if (!shouldShowCard('delete account')) {
       <div class="settings-empty">
         <p>No settings matched your search.</p>
       </div>
