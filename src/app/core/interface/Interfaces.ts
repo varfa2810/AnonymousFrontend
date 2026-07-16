@@ -86,3 +86,14 @@ export interface CommentResponseDto {
   commentId: number;
   comment: string;
 }
+
+export interface ViolationOption {
+  id: number;
+  optionName: string;
+}
+
+export interface ReportMessageDto {
+  messageId: number;
+  violatedOption: number;
+  comment: string;
+}
