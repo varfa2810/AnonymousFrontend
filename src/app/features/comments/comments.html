@@ -1,4 +1,6 @@
 <section class="comments-page">
+  <p-toast position="top-right" />
+
   <div class="comments-shell">
     @if (isLoading()) {
       <div class="comments-state comments-state--loading">
@@ -148,6 +150,18 @@
                 ></i>
               </button>
             </div>
+
+            <div class="comment-footer-actions">
+              <button
+                type="button"
+                class="comment-report-btn"
+                (click)="openReportModal(commentData.messageId)"
+                [attr.aria-label]="'Report message ' + commentData.messageId"
+                title="Report message"
+              >
+                <i class="bi bi-flag-fill"></i>
+              </button>
+            </div>
           </footer>
 
           @if (isThreadExpanded(commentData.messageId)) {
@@ -261,5 +275,74 @@
     >
       <i class="bi bi-arrow-up-short"></i>
     </button>
+  }
+
+  @if (reportModalVisible()) {
+    <div class="report-modal-backdrop" (click)="closeReportModal()">
+      <section
+        class="report-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reportModalTitle"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          type="button"
+          class="report-modal__close"
+          aria-label="Close report modal"
+          (click)="closeReportModal()"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+
+        <div class="report-modal__icon">
+          <i class="bi bi-flag-fill"></i>
+        </div>
+
+        <span class="report-modal__eyebrow">Safety Report</span>
+        <h2 id="reportModalTitle">Report message #{{ selectedReportMessageId() }}</h2>
+        <p>
+          Choose the reason that best describes why this message should be reviewed.
+        </p>
+
+        <label class="report-modal__label" for="violationOption">Violation Type</label>
+        <select
+          id="violationOption"
+          class="report-modal__select"
+          [(ngModel)]="selectedViolationId"
+        >
+          <option [ngValue]="null">Select a reason</option>
+          @for (option of violationOptions; track option.id) {
+            <option [ngValue]="option.id">{{ option.optionName }}</option>
+          }
+        </select>
+
+        <label class="report-modal__label" for="reportMessage">Optional message</label>
+        <textarea
+          id="reportMessage"
+          class="report-modal__textarea"
+          rows="4"
+          maxlength="300"
+          placeholder="Add any extra context for the moderators..."
+          [(ngModel)]="reportMessage"
+        ></textarea>
+
+        <div class="report-modal__meta">{{ reportMessage.trim().length }}/300</div>
+
+        <div class="report-modal__actions">
+          <button type="button" class="report-modal__btn report-modal__btn--ghost" (click)="closeReportModal()">
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="report-modal__btn report-modal__btn--danger"
+            [disabled]="selectedViolationId === null || isSubmittingReport"
+            (click)="submitReport()"
+          >
+            {{ isSubmittingReport ? 'Submitting...' : 'Continue' }}
+          </button>
+        </div>
+      </section>
+    </div>
   }
 </section>

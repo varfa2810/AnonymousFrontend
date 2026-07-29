@@ -58,6 +58,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/profile').then((c) => c.Profile),
+    title: 'Profile',
+    canActivate: [authGuard],
+    data: { allowSuperAdmin: true },
+  },
+
+  {
     path: 'settings',
     loadComponent: () => import('./features/settings/settings').then((c) => c.Settings),
     title: 'Settings',

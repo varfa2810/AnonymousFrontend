@@ -86,3 +86,26 @@ export interface CommentResponseDto {
   commentId: number;
   comment: string;
 }
+
+export interface ViolationOption {
+  id: number;
+  optionName: string;
+}
+
+export interface ReportMessageDto {
+  messageId: number;
+  violatedOption: number;
+  comment: string;
+}
+
+export interface UserProfileResponseDto {
+  username: string;
+  role: string;
+  branchId: number;
+  companyName: string;
+  messageContributionCount: number;
+  likedCount: number;
+  dislikedCount: number;
+  heartCount: number;
+  partyCount: number;
+}

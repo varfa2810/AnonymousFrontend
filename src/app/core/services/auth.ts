@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../enviornments/env.dev';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
-import { ApiResponse } from '../interface/Interfaces';
+import { ApiResponse, UserProfileResponseDto } from '../interface/Interfaces';
 
 
 export interface CurrentUser {
@@ -41,7 +41,6 @@ export class Auth {
   }
 
   checkSession(): Observable<any> {
-     console.trace('checkSession called');
     return this.httpclient.get<any>(`${this.baseUrl}/auth/WhoAmI`).pipe(
       tap((user) => {
         this.currentUser.set(user);
@@ -61,7 +60,13 @@ export class Auth {
 
   deleteUser(userId: string): Observable<ApiResponse<any>> {
     return this.httpclient
-      .delete<ApiResponse<any>>(`${this.baseUrl}/auth/deleteUser/${userId}`);
+      .delete<ApiResponse<any>>(`${this.baseUrl}/auth/deleteUser/${encodeURIComponent(userId)}`);
+  }
+
+  getUserProfile(userId: string): Observable<ApiResponse<UserProfileResponseDto>> {
+    return this.httpclient.get<ApiResponse<UserProfileResponseDto>>(
+      `${this.baseUrl}/auth/profile/${encodeURIComponent(userId)}`
+    );
   }
 
 }

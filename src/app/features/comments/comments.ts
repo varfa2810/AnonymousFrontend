@@ -1,11 +1,19 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { CommentService } from '../../core/services/comment-service';
 import { Auth } from '../../core/services/auth';
-import { CommentDto, MessageComment } from '../../core/interface/Interfaces';
+import {
+  CommentDto,
+  MessageComment,
+  ReportMessageDto,
+  ViolationOption,
+} from '../../core/interface/Interfaces';
 
 type CommentThreadRecord = Record<string, unknown>;
+type ViolationOptionRecord = Record<string, unknown>;
 type ReactionCommentRecord = Omit<CommentDto, 'createdDate'> & {
   createdDate: string | Date;
   like?: number;
@@ -13,14 +21,16 @@ type ReactionCommentRecord = Omit<CommentDto, 'createdDate'> & {
 
 @Component({
   selector: 'app-comments',
-  imports: [RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule, ToastModule],
   templateUrl: './comments.html',
   styleUrl: './comments.scss',
   standalone: true,
+  providers: [MessageService],
 })
 export class Comments {
   private commentService = inject(CommentService);
   private authService = inject(Auth);
+  private messageService = inject(MessageService);
   goldenLikeTarget = 1;
   bannerLikeThreshold = 15;
   readonly minCommentLength = 2;
@@ -36,6 +46,12 @@ export class Comments {
   commentDrafts = signal<Record<number, string>>({});
   submittingCommentMessageId = signal<number | null>(null);
   commentSubmitErrors = signal<Record<number, string>>({});
+  reportModalVisible = signal(false);
+  selectedReportMessageId = signal<number | null>(null);
+  selectedViolationId: number | null = null;
+  reportMessage = '';
+  isSubmittingReport = false;
+  violationOptions: ViolationOption[] = [];
 
   comments: CommentDto[] = [];
 
@@ -58,6 +74,24 @@ export class Comments {
         console.error('Failed to load comments', err);
         this.comments = [];
         this.isLoading.set(false);
+      },
+    });
+  }
+
+  loadViolationOptions(): void {
+    this.commentService.GetAllViolatedOptions().subscribe({
+      next: (res) => {
+        const options = Array.isArray(res?.data) ? res.data : [];
+        this.violationOptions = options
+          .filter((option) => !!option && typeof option === 'object')
+          .map((option) =>
+            this.normalizeViolationOption(option as unknown as ViolationOptionRecord)
+          )
+          .filter((option) => option.id > 0);
+      },
+      error: (err) => {
+        console.error('Failed to load violation options', err);
+        this.violationOptions = [];
       },
     });
   }
@@ -304,6 +338,79 @@ export class Comments {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  openReportModal(messageId: number): void {
+    this.selectedReportMessageId.set(messageId);
+    this.selectedViolationId = null;
+    this.reportMessage = '';
+    this.loadViolationOptions();
+    this.reportModalVisible.set(true);
+  }
+
+  closeReportModal(): void {
+    if (this.isSubmittingReport) {
+      return;
+    }
+
+    this.reportModalVisible.set(false);
+    this.selectedReportMessageId.set(null);
+    this.selectedViolationId = null;
+    this.reportMessage = '';
+  }
+
+  submitReport(): void {
+    const messageId = this.selectedReportMessageId();
+
+    if (this.selectedViolationId === null || messageId === null || this.isSubmittingReport) {
+      return;
+    }
+
+    const payload: ReportMessageDto = {
+      messageId,
+      violatedOption: this.selectedViolationId,
+      comment: this.reportMessage.trim(),
+    };
+
+    this.isSubmittingReport = true;
+
+    this.commentService.ReportMessage(payload).subscribe({
+      next: (res) => {
+        this.isSubmittingReport = false;
+
+        if (res?.status !== 200 && res?.status !== 201 && res?.data !== true) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Report failed',
+            detail: res?.message || 'We could not submit your report right now.',
+            life: 4000,
+          });
+          return;
+        }
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Report submitted',
+          detail: res?.message || 'Your report has been sent for review.',
+          life: 4000,
+        });
+
+        this.reportModalVisible.set(false);
+        this.selectedReportMessageId.set(null);
+        this.selectedViolationId = null;
+        this.reportMessage = '';
+      },
+      error: (err) => {
+        this.isSubmittingReport = false;
+        console.error('Failed to report message', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Report failed',
+          detail: 'We could not submit your report right now.',
+          life: 4000,
+        });
+      },
+    });
+  }
+
   private fetchMessageThread(messageId: number, forceReload = false): void {
     this.threadErrorMessageId.set(null);
 
@@ -385,6 +492,16 @@ export class Comments {
         this.asString(comment['username']) ??
         this.asString(comment['postedBy']) ??
         undefined,
+    };
+  }
+
+  private normalizeViolationOption(option: ViolationOptionRecord): ViolationOption {
+    return {
+      id: this.asNumber(option['id']) ?? this.asNumber(option['Id']) ?? 0,
+      optionName:
+        this.asString(option['optionName']) ??
+        this.asString(option['OptionName']) ??
+        'Unknown option',
     };
   }
 

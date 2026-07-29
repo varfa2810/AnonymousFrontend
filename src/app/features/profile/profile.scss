@@ -1,0 +1,276 @@
+.profile-page {
+  padding: 1rem;
+  color: #edf2f7;
+  background:
+    radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.1), transparent 26%);
+}
+
+.profile-shell {
+  width: min(100%, 64rem);
+  margin: 0 auto;
+  padding: 1.6rem;
+  border-radius: 1.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.12), transparent 24%),
+    radial-gradient(circle at top left, rgba(245, 158, 11, 0.09), transparent 22%),
+    linear-gradient(180deg, rgba(17, 23, 31, 0.98), rgba(11, 17, 24, 0.98));
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28);
+}
+
+.profile-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.profile-hero__copy {
+  padding: 1.1rem 0.25rem 0.55rem;
+}
+
+.profile-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: #ffd58b;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.profile-hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.profile-hero p {
+  margin: 1rem 0 0;
+  max-width: 35rem;
+  color: rgba(226, 232, 240, 0.72);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.profile-state {
+  margin-top: 1.5rem;
+  min-height: 8rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(237, 242, 247, 0.84);
+  font-weight: 600;
+}
+
+.profile-state--loading .spinner-border {
+  color: #8ec5ff;
+}
+
+.profile-state--error {
+  color: #ffb9c2;
+}
+
+.profile-card__label {
+  display: inline-block;
+  margin-bottom: 0.55rem;
+  color: rgba(255, 214, 138, 0.9);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.profile-identity-card,
+.profile-stat-card,
+.profile-detail-card {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.profile-identity-card {
+  padding: 1.2rem;
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.14), transparent 28%),
+    linear-gradient(160deg, rgba(28, 36, 48, 0.98), rgba(18, 24, 34, 0.98));
+}
+
+.profile-identity-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.profile-identity-card h2 {
+  margin: 0;
+  color: #f8fbff;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+.profile-identity-card__meta {
+  margin-top: 1.2rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.profile-identity-card__meta span {
+  min-height: 3rem;
+  padding: 0.88rem 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eef4fb;
+  font-weight: 700;
+}
+
+.profile-identity-card__meta i {
+  color: #ffd58b;
+}
+
+.profile-visibility-btn {
+  min-height: 2.8rem;
+  padding: 0.6rem 0.95rem;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff3d6;
+  font-weight: 800;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.profile-visibility-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.profile-stats-grid {
+  margin-top: 1.15rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.profile-stat-card {
+  min-height: 12rem;
+  padding: 1.1rem;
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    rgba(15, 23, 33, 0.94);
+}
+
+.profile-stat-card--spotlight {
+  grid-column: span 2;
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 26%),
+    linear-gradient(180deg, rgba(14, 23, 34, 0.98), rgba(11, 18, 28, 0.98));
+}
+
+.profile-stat-card--like {
+  background:
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.14), transparent 26%),
+    rgba(15, 23, 33, 0.94);
+}
+
+.profile-stat-card--dislike {
+  background:
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.14), transparent 26%),
+    rgba(15, 23, 33, 0.94);
+}
+
+.profile-stat-card--heart {
+  background:
+    radial-gradient(circle at top right, rgba(244, 63, 94, 0.16), transparent 26%),
+    rgba(15, 23, 33, 0.94);
+}
+
+.profile-stat-card--party {
+  background:
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.16), transparent 26%),
+    rgba(15, 23, 33, 0.94);
+}
+
+.profile-stat-card strong,
+.profile-detail-card strong {
+  display: block;
+  color: #f8fbff;
+}
+
+.profile-stat-card strong {
+  margin-top: 0.1rem;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.profile-stat-card p {
+  margin: 0.6rem 0 0;
+  color: rgba(226, 232, 240, 0.62);
+  line-height: 1.5;
+}
+
+.profile-details-grid {
+  margin-top: 1.15rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.profile-detail-card {
+  padding: 1rem 1.05rem;
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    rgba(16, 23, 31, 0.92);
+}
+
+.profile-detail-card strong {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+@media (max-width: 767.98px) {
+  .profile-page {
+    padding: 0.85rem;
+  }
+
+  .profile-shell {
+    padding: 1.2rem;
+  }
+
+  .profile-hero,
+  .profile-stats-grid,
+  .profile-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-stat-card--spotlight {
+    grid-column: auto;
+  }
+
+  .profile-identity-card__top {
+    flex-direction: column;
+  }
+
+  .profile-visibility-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

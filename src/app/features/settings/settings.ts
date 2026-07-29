@@ -1,89 +1,27 @@
 import { Component, inject } from '@angular/core';
-import {
-  AbstractControl,
-  AsyncValidatorFn,
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { catchError, map, of, switchMap, timer } from 'rxjs';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Auth } from '../../core/services/auth';
 
-const uniqueUsernameValidator = (userAuth: Auth, currentUsername: string | null): AsyncValidatorFn => {
-  return (control: AbstractControl) => {
-    const username = control.value?.trim();
-
-    if (!username || username.length < 3 || username === currentUsername) {
-      return of(null);
-    }
-
-    return timer(300).pipe(
-      switchMap(() => userAuth.checkUniqueUsername(username)),
-      map((isUnique) => (isUnique ? null : { usernameTaken: true })),
-      catchError(() => of(null)),
-    );
-  };
-};
-
 @Component({
   selector: 'app-settings',
-  imports: [ReactiveFormsModule, RouterModule, ConfirmPopupModule, ToastModule],
+  imports: [RouterModule, ConfirmPopupModule, ToastModule],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
   standalone: true,
   providers: [ConfirmationService, MessageService],
 })
 export class Settings {
-  private formBuilder = inject(FormBuilder);
   private userAuth = inject(Auth);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
-  submitted = false;
   isDeletingAccount = false;
   settingsSearch = '';
   isSuperAdmin = this.userAuth.isSuperAdmin();
-
-  usernameForm = this.formBuilder.group({
-    newUsername: this.formBuilder.control(this.userAuth.currentUser()?.username ?? '', {
-      validators: [Validators.required, Validators.minLength(3)],
-      asyncValidators: [uniqueUsernameValidator(this.userAuth, this.userAuth.currentUser()?.username ?? '')],
-      updateOn: 'blur',
-    }),
-  });
-
-  hasError(controlName: string, errorName: string): boolean {
-    const control = this.usernameForm.get(controlName);
-    return !!control && control.hasError(errorName) && (control.touched || this.submitted);
-  }
-
-  get isCheckingUsername(): boolean {
-    return this.usernameForm.get('newUsername')?.pending ?? false;
-  }
-
-  get isUsernameAvailable(): boolean {
-    const control = this.newUsernameControl;
-    const username = control?.value?.trim();
-
-    return !!(
-      control &&
-      username &&
-      username.length >= 3 &&
-      !control.errors &&
-      !control.pending &&
-      control.touched &&
-      username !== this.userAuth.currentUser()?.username
-    );
-  }
-
-  get newUsernameControl() {
-    return this.usernameForm.get('newUsername');
-  }
 
   updateSettingsSearch(event: Event) {
     this.settingsSearch = (event.target as HTMLInputElement).value.trim().toLowerCase();
@@ -95,15 +33,6 @@ export class Settings {
     }
 
     return title.toLowerCase().includes(this.settingsSearch);
-  }
-
-  onSubmit() {
-    this.submitted = true;
-
-    if (this.usernameForm.invalid) {
-      this.usernameForm.markAllAsTouched();
-      return;
-    }
   }
 
   confirmDeleteAccount(event: Event) {

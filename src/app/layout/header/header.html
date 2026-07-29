@@ -103,6 +103,11 @@
 
           <div class="dropdown-menu dropdown-menu-end app-user-dropdown" [class.show]="isUserMenuOpen">
             <p-confirmpopup />
+            <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/profile" (click)="onNavClick()">
+              <i class="bi bi-person-badge"></i>
+              <span>Profile</span>
+            </a>
+            <div class="app-dropdown-divider"></div>
             <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/settings" (click)="onNavClick()">
               <i class="bi bi-gear"></i>
               <span>Settings</span>

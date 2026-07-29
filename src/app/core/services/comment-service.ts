@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../enviornments/env.dev';
-import { ApiResponse, CommentResponseDto, MessageDto, ReactToMessageDto } from '../interface/Interfaces';
+import {
+  ApiResponse,
+  CommentResponseDto,
+  MessageDto,
+  ReactToMessageDto,
+  ReportMessageDto,
+  ViolationOption,
+} from '../interface/Interfaces';
 
 export interface CommentRequestDto {
   messageId: number;
@@ -23,12 +30,25 @@ export class CommentService {
     );
   }
 
+  GetAllViolatedOptions(): Observable<ApiResponse<ViolationOption[]>> {
+    return this.httpclient.get<ApiResponse<ViolationOption[]>>(
+      `${this.baseUrl}/common-utility/violations-options`
+    );
+  }
+  
   ReactToComment(reactData: ReactToMessageDto): Observable<ApiResponse<boolean>> {
     return this.httpclient.post<ApiResponse<boolean>>(`${this.baseUrl}/messages/react`, reactData);
   }
 
   CommentOnMessage(commentData: CommentRequestDto): Observable<ApiResponse<boolean>> {
     return this.httpclient.post<ApiResponse<boolean>>(`${this.baseUrl}/messages/commentOnMessage`, commentData);
+  }
+
+  ReportMessage(reportData: ReportMessageDto): Observable<ApiResponse<boolean>> {
+    return this.httpclient.post<ApiResponse<boolean>>(
+      `${this.baseUrl}/messages/reportMessage`,
+      reportData
+    );
   }
 
   GetCommentsByMessageId(messageid: number): Observable<ApiResponse<CommentResponseDto[]>> {

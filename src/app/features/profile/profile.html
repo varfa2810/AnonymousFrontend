@@ -1,0 +1,98 @@
+<section class="profile-page">
+  <div class="profile-shell">
+    @if (isLoading()) {
+      <div class="profile-state profile-state--loading">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <span>Loading profile...</span>
+      </div>
+    } @else if (loadError()) {
+      <div class="profile-state profile-state--error">
+        <i class="bi bi-exclamation-circle"></i>
+        <span>{{ loadError() }}</span>
+      </div>
+    } @else if (profile(); as userProfile) {
+      <div class="profile-hero">
+        <div class="profile-hero__copy">
+          <span class="profile-eyebrow">Account Space</span>
+          <h1>Profile</h1>
+          <p>
+            Your identity, contribution pulse, and reaction footprint in one focused dashboard.
+          </p>
+        </div>
+
+        <article class="profile-identity-card">
+          <div class="profile-identity-card__top">
+            <div class="profile-identity-card__name-block">
+              <span class="profile-card__label">Username</span>
+              <h2>{{ getDisplayUsername(userProfile.username) }}</h2>
+            </div>
+
+            <button
+              type="button"
+              class="profile-visibility-btn"
+              (click)="toggleUsernameVisibility()"
+            >
+              <i class="bi" [class.bi-eye-fill]="showUsername()" [class.bi-eye-slash-fill]="!showUsername()"></i>
+              <span>{{ showUsername() ? 'Hide username' : 'Show username' }}</span>
+            </button>
+          </div>
+
+          <div class="profile-identity-card__meta">
+            <span><i class="bi bi-person-badge"></i>{{ userProfile.role }}</span>
+            <span><i class="bi bi-buildings"></i>{{ userProfile.companyName }}</span>
+            <span><i class="bi bi-diagram-3"></i>Branch {{ userProfile.branchId }}</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="profile-stats-grid">
+        <article class="profile-stat-card profile-stat-card--spotlight">
+          <span class="profile-card__label">Message Contributions</span>
+          <strong>{{ userProfile.messageContributionCount }}</strong>
+          <p>Messages contributed to the platform so far.</p>
+        </article>
+
+        <article class="profile-stat-card profile-stat-card--like">
+          <span class="profile-card__label">Likes</span>
+          <strong>{{ userProfile.likedCount }}</strong>
+          <p>Positive reactions received.</p>
+        </article>
+
+        <article class="profile-stat-card profile-stat-card--dislike">
+          <span class="profile-card__label">Dislikes</span>
+          <strong>{{ userProfile.dislikedCount }}</strong>
+          <p>Critical reactions recorded.</p>
+        </article>
+
+        <article class="profile-stat-card profile-stat-card--heart">
+          <span class="profile-card__label">Hearts</span>
+          <strong>{{ userProfile.heartCount }}</strong>
+          <p>Supportive reactions collected.</p>
+        </article>
+
+        <article class="profile-stat-card profile-stat-card--party">
+          <span class="profile-card__label">Party</span>
+          <strong>{{ userProfile.partyCount }}</strong>
+          <p>Celebration reactions earned.</p>
+        </article>
+      </div>
+
+      <div class="profile-details-grid">
+        <article class="profile-detail-card">
+          <span class="profile-card__label">Role</span>
+          <strong>{{ userProfile.role }}</strong>
+        </article>
+
+        <article class="profile-detail-card">
+          <span class="profile-card__label">Company</span>
+          <strong>{{ userProfile.companyName }}</strong>
+        </article>
+
+        <article class="profile-detail-card">
+          <span class="profile-card__label">Branch Id</span>
+          <strong>{{ userProfile.branchId }}</strong>
+        </article>
+      </div>
+    }
+  </div>
+</section>
